@@ -63,7 +63,7 @@ module.exports = {
             } else {
                 throw error(invalid)
             }
-        }catch (error){
+        }catch(error){
             res.status(400).json({error})
         }
     },

@@ -2,9 +2,9 @@
 const express = require('express');
 const multer = require('./utils/multer-config')
 
-const userCtrl = require('./routes/userCtrl')
-const ressourceCtrl = require('./routes/ressource')
-const chatCtrl = require('./routes/chat')
+const userCtrl = require('./routes/userCtrl-routes')
+const ressourceCtrl = require('./routes/ressource-routes')
+const chatCtrl = require('./routes/chat-routes')
 
 exports.router = (function(){ 
 
