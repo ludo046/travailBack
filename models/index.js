@@ -11,7 +11,7 @@ const sequelize = new Sequelize(
   {
     host: process.env.HOST,
     dialect: dbConfig.dialect,
-    //operatorsAliases: false,
+    operatorsAliases: 0,
 
     pool: {
       max: dbConfig.pool.max,
