@@ -7,7 +7,7 @@ const fs = require('fs')
 require('dotenv').config();
 const db = require("./models");
 //db.sequelize.sync();
-db.sequelize.sync({force: false});
+//db.sequelize.sync({force: false});
 require('dotenv').config();
 
 

@@ -54,20 +54,20 @@ module.exports = (sequelize, Sequelize) => {
       sequelize,
       tableName: "users",
       timestamps: false,
-      // indexes: [
-      //   {
-      //     name: "PRIMARY",
-      //     unique: true,
-      //     using: "BTREE",
-      //     fields: [{ name: "id" }],
-      //   },
-      //   {
-      //     name: "email_UNIQUE",
-      //     unique: true,
-      //     using: "BTREE",
-      //     fields: [{ name: "email" }],
-      //   },
-      // ],
+      indexes: [
+        {
+          name: "PRIMARY",
+          unique: true,
+          using: "BTREE",
+          fields: [{ name: "id" }],
+        },
+        {
+          name: "email_UNIQUE",
+          unique: true,
+          using: "BTREE",
+          fields: [{ name: "email" }],
+        },
+      ],
     }
   );
   return Users;

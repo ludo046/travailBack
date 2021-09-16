@@ -13,10 +13,10 @@ module.exports = (sequelize, Sequelize) => {
       userId: {
         allowNull: false,
         type : Sequelize.INTEGER,
-        // references: {
-        //   model: "Users",
-        //   key: "id"
-        // }
+        references: {
+          model: "Users",
+          key: "id"
+        }
       },
       title: {
         allowNull: false,
@@ -57,24 +57,24 @@ module.exports = (sequelize, Sequelize) => {
       sequelize,
       tableName: "ressource",
       timestamps: false,
-      // indexes: [
-      //   {
-      //     name: "PRIMARY",
-      //     unique: true,
-      //     using: "BTREE",
-      //     fields: [{ name: "id" }],
-      //   },
-      //   {
-      //     name: "ordreDate",
-      //     using: "BTREE",
-      //     fields: [{ name: "createdAt" }],
-      //   },
-      //   {
-      //     name: "fk_ressource_user_idx",
-      //     using: "BTREE",
-      //     fields: [{ name: "userId" }],
-      //   },
-      // ],
+      indexes: [
+        {
+          name: "PRIMARY",
+          unique: true,
+          using: "BTREE",
+          fields: [{ name: "id" }],
+        },
+        {
+          name: "ordreDate",
+          using: "BTREE",
+          fields: [{ name: "createdAt" }],
+        },
+        {
+          name: "fk_ressource_user_idx",
+          using: "BTREE",
+          fields: [{ name: "userId" }],
+        },
+      ],
     }
   );
   return Ressources;
