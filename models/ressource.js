@@ -2,7 +2,7 @@
 
 module.exports = (sequelize, Sequelize) => {
   const Ressources = sequelize.define(
-    "ressource",
+    "Ressource",
     {
       id:{
         autoIncrement: true,

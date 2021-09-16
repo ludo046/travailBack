@@ -2,7 +2,7 @@
 
 module.exports = (sequelize, Sequelize) => {
   const Users = sequelize.define(
-    "users",
+    "Users",
     {
       id:{
         autoIncrement: true,

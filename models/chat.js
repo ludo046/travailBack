@@ -2,7 +2,7 @@
 
 module.exports = (sequelize, Sequelize) => {
   const Chat = sequelize.define(
-    "chat",
+    "Chat",
     {
       id:{
         autoIncrement: true,
