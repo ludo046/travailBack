@@ -2,7 +2,7 @@
 
 module.exports = (sequelize, Sequelize) => {
   const Ressources = sequelize.define(
-    "Ressource",
+    "ressource",
     {
       id:{
         autoIncrement: true,
@@ -13,10 +13,10 @@ module.exports = (sequelize, Sequelize) => {
       userId: {
         allowNull: false,
         type : Sequelize.INTEGER,
-        references: {
-          model: "Users",
-          key: "id"
-        }
+        // references: {
+        //   model: "Users",
+        //   key: "id"
+        // }
       },
       title: {
         allowNull: false,
@@ -55,7 +55,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     {
       sequelize,
-      tableName: "Ressource",
+      tableName: "ressource",
       timestamps: false,
       indexes: [
         {

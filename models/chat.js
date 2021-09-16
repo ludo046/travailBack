@@ -2,7 +2,7 @@
 
 module.exports = (sequelize, Sequelize) => {
   const Chat = sequelize.define(
-    "Chat",
+    "chat",
     {
       id:{
         autoIncrement: true,
@@ -51,7 +51,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     {
       sequelize,
-      tableName: "Chat",
+      tableName: "chat",
       timestamps: false,
       indexes: [
         {
