@@ -28,9 +28,9 @@ db.sequelize = sequelize;
 
 
 
-db.User = require("./user")(sequelize,Sequelize);
-db.Ressource = require('./ressource')(sequelize,Sequelize);
-db.Chat = require('./chat')(sequelize,Sequelize);
+db.User = require("./user")(Sequelize,sequelize);
+db.Ressource = require('./ressource')(Sequelize,sequelize);
+db.Chat = require('./chat')(Sequelize,sequelize);
 
 
 db.User.hasMany(db.Ressource, {
