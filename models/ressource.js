@@ -14,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
         type : Sequelize.INTEGER,
         references: {
-          model: "users",
+          model: "Users",
           key: "id"
         }
       },
@@ -55,7 +55,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     {
       sequelize,
-      tableName: "ressource",
+      tableName: "Ressource",
       timestamps: false,
       indexes: [
         {

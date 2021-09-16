@@ -52,7 +52,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     {
       sequelize,
-      tableName: "users",
+      tableName: "Users",
       timestamps: false,
       indexes: [
         {
