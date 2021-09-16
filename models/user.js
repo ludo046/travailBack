@@ -1,8 +1,10 @@
 "use strict";
 
+
+
 module.exports = (sequelize, Sequelize) => {
   const Users = sequelize.define(
-    "Users",
+    "users",
     {
       id:{
         autoIncrement: true,

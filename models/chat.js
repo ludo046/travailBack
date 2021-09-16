@@ -1,4 +1,5 @@
 "use strict";
+users = require('./user')
 
 module.exports = (sequelize, Sequelize) => {
   const Chat = sequelize.define(
@@ -14,7 +15,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
         type : Sequelize.INTEGER,
         references: {
-          model: "Users",
+          model: users,
           key: "id"
         }
       },
