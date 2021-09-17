@@ -1,13 +1,13 @@
 "use strict";
 
 
-module.exports = (sequelize, Sequelize) => {
+module.exports = (sequelize, Datatypes) => {
   const Users = sequelize.define(
     "users",
     {
       id:{
         autoIncrement: true,
-        type: Sequelize.INTEGER,
+        type: Datatypes.INTEGER,
         allowNull: false,
         primaryKey: true
       },
