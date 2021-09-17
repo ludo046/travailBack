@@ -14,11 +14,11 @@ module.exports = (sequelize, Sequelize) => {
       },
       firstname: {
         allowNull: false,
-        type : Sequelize.STRING(),
+        type : Sequelize.STRING,
       },
       lastname: {
         allowNull: false,
-        type: Sequelize.STRING(100)
+        type: Sequelize.STRING
       },
       age: {
         allowNull: false,
@@ -26,16 +26,16 @@ module.exports = (sequelize, Sequelize) => {
       },
       email: {
         allowNull: false,
-        type: Sequelize.STRING(255),
+        type: Sequelize.STRING,
         unique: "email_UNIQUE"
       },
       password: {
         allowNull: false,
-        type: Sequelize.STRING(255)
+        type: Sequelize.STRING
       },
       picture: {
         allowNull: true,
-        type: Sequelize.STRING(255)
+        type: Sequelize.STRING
       },
       isAdmin: {
         allowNull: false,
