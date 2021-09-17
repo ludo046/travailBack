@@ -17,37 +17,37 @@ module.exports = (sequelize, Datatypes) => {
       },
       lastname: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Datatypes.STRING
       },
       age: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Datatypes.INTEGER
       },
       email: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Datatypes.STRING,
         unique: "email_UNIQUE"
       },
       password: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Datatypes.STRING
       },
       picture: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Datatypes.STRING
       },
       isAdmin: {
         allowNull: false,
-        type: Sequelize.BOOLEAN,
+        type: Datatypes.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Datatypes.DATE,
         defaultValue: Sequelize.NOW
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Datatypes.DATE,
         defaultValue: Sequelize.NOW
       },
     },
