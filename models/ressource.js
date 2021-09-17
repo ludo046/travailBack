@@ -1,5 +1,4 @@
 "use strict";
-users = require('./user')
 
 module.exports = (sequelize, Sequelize) => {
   const Ressources = sequelize.define(
@@ -15,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
         type : Sequelize.INTEGER,
         references: {
-          model: users,
+          model: "users",
           key: "id"
         }
       },
