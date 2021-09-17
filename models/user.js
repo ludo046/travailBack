@@ -2,7 +2,7 @@
 
 
 module.exports = (sequelize, Sequelize) => {
-  const Users = sequelize.define(
+  return sequelize.define(
     "users",
     {
       id:{
@@ -71,5 +71,4 @@ module.exports = (sequelize, Sequelize) => {
       ],
     }
   );
-  return Users;
 }
