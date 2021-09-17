@@ -1,54 +1,54 @@
 "use strict";
 
 
-module.exports = (sequelize, Datatypes) => {
-  const Users = sequelize.define(
+module.exports = (sequelize, Sequelize) => {
+  const Users = Sequelize.define(
     "users",
     {
       id:{
         autoIncrement: true,
-        type: Datatypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true
       },
       firstname: {
         allowNull: false,
-        type: Datatypes.STRING
+        type: Sequelize.STRING
       },
       lastname: {
         allowNull: false,
-        type: Datatypes.STRING
+        type: Sequelize.STRING
       },
       age: {
         allowNull: false,
-        type: Datatypes.INTEGER
+        type: Sequelize.INTEGER
       },
       email: {
         allowNull: false,
-        type: Datatypes.STRING,
+        type: Sequelize.STRING,
         unique: "email_UNIQUE"
       },
       password: {
         allowNull: false,
-        type: Datatypes.STRING
+        type: Sequelize.STRING
       },
       picture: {
         allowNull: true,
-        type: Datatypes.STRING
+        type: Sequelize.STRING
       },
       isAdmin: {
         allowNull: false,
-        type: Datatypes.BOOLEAN,
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
-        type: Datatypes.DATE,
-        defaultValue: Datatypes.NOW
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       },
       updatedAt: {
         allowNull: false,
-        type: Datatypes.DATE,
-        defaultValue: Datatypes.NOW
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       },
     },
     {
