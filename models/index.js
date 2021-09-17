@@ -11,7 +11,7 @@ const sequelize = new Sequelize(
   {
     host: process.env.HOST,
     dialect: dbConfig.dialect,
-    operatorsAliases: 0,
+    operatorsAliases: false,
 
     pool: {
       max: dbConfig.pool.max,
@@ -21,18 +21,16 @@ const sequelize = new Sequelize(
     },
   }
 );
-const db = {
-  User = require("./user")(Sequelize,sequelize),
-  Ressource = require('./ressource')(Sequelize,sequelize),
-  Chat = require('./chat')(Sequelize,sequelize),
-};
+const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 
 
-
+db.User = require("./user")(Sequelize,sequelize);
+db.Ressource = require('./ressource')(Sequelize,sequelize);
+db.Chat = require('./chat')(Sequelize,sequelize);
 
 
 db.User.hasMany(db.Ressource, {
