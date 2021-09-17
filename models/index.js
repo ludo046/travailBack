@@ -3,7 +3,7 @@
 require("dotenv").config();
 
 const dbConfig = require("../config/db.config.js");
-const {Sequelize, sequelize} = require("sequelize");
+const Sequelize = require("sequelize");
 const sequelize = new Sequelize(
   process.env.DB,
   process.env.USERS,
@@ -21,16 +21,18 @@ const sequelize = new Sequelize(
     },
   }
 );
-const db = {};
+const db = {
+  User = require("./user")(Sequelize,sequelize),
+  Ressource = require('./ressource')(Sequelize,sequelize),
+  Chat = require('./chat')(Sequelize,sequelize),
+};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 
 
-db.User = require("./user")(Sequelize,sequelize);
-db.Ressource = require('./ressource')(Sequelize,sequelize);
-db.Chat = require('./chat')(Sequelize,sequelize);
+
 
 
 db.User.hasMany(db.Ressource, {
