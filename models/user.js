@@ -2,7 +2,7 @@
 
 
 module.exports = (sequelize, Sequelize) => {
-  const Users = Sequelize.define(
+  const Users = sequelize.define(
     "users",
     {
       id:{
