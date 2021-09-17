@@ -3,7 +3,7 @@
 require("dotenv").config();
 
 const dbConfig = require("../config/db.config.js");
-const Sequelize = require("sequelize");
+const {Sequelize, sequelize} = require("sequelize");
 const sequelize = new Sequelize(
   process.env.DB,
   process.env.USERS,
@@ -42,7 +42,7 @@ db.Ressource.belongsTo(db.User, {
   foreignKey: "userId",
   as: "user_ressource",
 });
-
+npm 
 db.User.hasMany(db.Chat, {
   foreignKey:"userId",
   as: "user_chat"
