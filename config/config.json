@@ -17,7 +17,7 @@
     "username": "ludovic",
     "password": "ludo046",
     "database": "database_production_travailAvecLeSourire",
-    "host": "127.0.0.1",
+    "host": "http://travailaveclesourire.fr",
     "dialect": "mysql"
   }
 }
