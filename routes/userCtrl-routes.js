@@ -27,7 +27,7 @@ module.exports = {
                     return res.status(400).json({ 'error' : `Vous n'avez pas l'age requis` });
                 }
 
-                models.User.findOne({
+                models.Users.findOne({
                     attributes: ['email'],
                     where: {email: email}
                 })
