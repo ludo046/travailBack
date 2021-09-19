@@ -5,19 +5,5 @@
     "database": "database_development_travailAvecLeSourire",
     "host": "127.0.0.1",
     "dialect": "mysql"
-  },
-  "test": {
-    "username": "ludovic",
-    "password": "ludo046",
-    "database": "database_test_travailAvecLeSourire",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "ludovic",
-    "password": "ludo046",
-    "database": "database_production_travailAvecLeSourire",
-    "host": "http://travailaveclesourire.fr",
-    "dialect": "mysql"
   }
 }
