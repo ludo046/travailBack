@@ -3,7 +3,7 @@
     "username": "ludovic",
     "password": "ludo046",
     "database": "database_development_travailAvecLeSourire",
-    "host": "http://travailaveclesourire.fr",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
