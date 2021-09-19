@@ -2,7 +2,7 @@ const models = require("../models");
 const asyncLib = require("async");
 const jwtUtils = require("../utils/jwt.utils");
 const fs = require("fs");
-const { invalid, func } = require("joi");
+const { invalid} = require("joi");
 const postRessourceSchema = require("../utils/joi/postRessourceSchema");
 const updateRessourceSchema = require('../utils/joi/updateSchema')
 
