@@ -6,7 +6,6 @@ const {invalid} = require('joi');
 const registerSchema = require('../utils/joi/registerSchema');
 const loginSchema = require('../utils/joi/loginSchema');
 const updateUserSchema = require('../utils/joi/updateProfile');
-const { message } = require('../utils/joi/registerSchema');
 
 
 module.exports = {
