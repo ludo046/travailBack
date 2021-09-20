@@ -28,14 +28,14 @@ module.exports = {
                     return res.status(400).json({ 'error' : `Vous n'avez pas l'age requis` });
                 }
 
-                models.User.findOne({
+                models.users.findOne({
                     attributes: ['email'],
                     where: {email: email}
                 })
                 .then(function(userFound){
                     if(!userFound){
                         bcrypt.hash(password, 10, function(err, bcryptedPassword){
-                            const newUser = models.User.create({
+                            const newUser = models.users.create({
                                 firstname: firstname,
                                 lastname: lastname,
                                 age: age,
