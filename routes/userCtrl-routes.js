@@ -5,7 +5,8 @@ const asyncLib = require('async');
 const {invalid} = require('joi');
 const registerSchema = require('../utils/joi/registerSchema');
 const loginSchema = require('../utils/joi/loginSchema');
-const updateUserSchema = require('../utils/joi/updateProfile')
+const updateUserSchema = require('../utils/joi/updateProfile');
+const { message } = require('../utils/joi/registerSchema');
 
 
 module.exports = {
@@ -34,7 +35,7 @@ module.exports = {
                 .then(function(userFound){
                     if(!userFound){
                         bcrypt.hash(password, 10, function(err, bcryptedPassword){
-                            const newUser = models.User.create({
+                            const newUser = models.Users.create({
                                 firstname: firstname,
                                 lastname: lastname,
                                 age: age,
@@ -49,7 +50,7 @@ module.exports = {
                                 })
                             })
                             .catch(function(error){
-                                return res.status(500).json({error})
+                                return res.status(500).json({message : error.message})
                             })
                         })
                     } else {
@@ -57,13 +58,13 @@ module.exports = {
                     }
                 })
                 .catch(function(error){
-                    return res.status(500).json({error})
+                    return res.status(500).json({message : error.message})
                 })
             } else {
                 throw error(invalid)
             }
         }catch(error){
-            res.status(400).json({error})
+            res.status(400).json({message : error.message})
         }
     },
 
