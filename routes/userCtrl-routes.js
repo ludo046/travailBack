@@ -99,13 +99,13 @@ module.exports = {
                     }
                 })
                 .catch(function(err){
-                    return res.status(500).json({'error' : `impossible de verifier l'utilisateur`})
+                    return res.status(500).json({message : error.message})
                 })
             } else {
                 throw error(invalid)
             }
         }catch(error){
-            res.status(400).json({error})
+            res.status(400).json({message : error.message})
         }
     },
 
