@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwtUtils = require('../utils/jwt.utils');
 const models = require('../models')
+const User = require('../models/user')
 const asyncLib = require('async');
 const {invalid} = require('joi');
 const registerSchema = require('../utils/joi/registerSchema');
@@ -27,14 +28,14 @@ module.exports = {
                     return res.status(400).json({ 'error' : `Vous n'avez pas l'age requis` });
                 }
 
-                models.User.findOne({
+                User.findOne({
                     attributes: ['email'],
                     where: {email: email}
                 })
                 .then(function(userFound){
                     if(!userFound){
                         bcrypt.hash(password, 10, function(err, bcryptedPassword){
-                            const newUser = models.User.create({
+                            const newUser = User.create({
                                 firstname: firstname,
                                 lastname: lastname,
                                 age: age,
