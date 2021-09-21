@@ -1,6 +1,5 @@
 "use strict";
 
-
 module.exports = (sequelize, Sequelize) => {
   const Users = sequelize.define(
     "users",
@@ -13,11 +12,11 @@ module.exports = (sequelize, Sequelize) => {
       },
       firstname: {
         allowNull: false,
-        type: Sequelize.STRING
+        type : Sequelize.STRING(100),
       },
       lastname: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(100)
       },
       age: {
         allowNull: false,
@@ -25,16 +24,16 @@ module.exports = (sequelize, Sequelize) => {
       },
       email: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(255),
         unique: "email_UNIQUE"
       },
       password: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(255)
       },
       picture: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(255)
       },
       isAdmin: {
         allowNull: false,

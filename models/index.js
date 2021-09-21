@@ -26,11 +26,11 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+module.exports = db
 
-
-db.User = require("./user")(Sequelize,sequelize);
-db.Ressource = require('./ressource')(Sequelize,sequelize);
-db.Chat = require('./chat')(Sequelize,sequelize);
+db.User = require("./user")(sequelize,Sequelize);
+db.Ressource = require('./ressource')(sequelize,Sequelize);
+db.Chat = require('./chat')(sequelize,Sequelize);
 
 
 db.User.hasMany(db.Ressource, {
@@ -52,5 +52,3 @@ db.Chat.belongsTo(db.User, {
   foreignKey: "userId",
   as: "user_chat"
 })
-
-module.exports = db
