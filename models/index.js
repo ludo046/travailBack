@@ -33,15 +33,15 @@ db.Ressource = require('./ressource')(sequelize,Sequelize);
 db.Chat = require('./chat')(sequelize,Sequelize);
 
 
-db.User.hasMany(db.Ressource, {
-  foreignKey: "userId",
-  as: "user_ressource",
-});
+// db.User.hasMany(db.Ressource, {
+//   foreignKey: "userId",
+//   as: "user_ressource",
+// });
 
-db.Ressource.belongsTo(db.User, {
-  foreignKey: "userId",
-  as: "user_ressource",
-});
+// db.Ressource.belongsTo(db.User, {
+//   foreignKey: "userId",
+//   as: "user_ressource",
+// });
 
 // db.User.hasMany(db.Chat, {
 //   foreignKey:"userId",
