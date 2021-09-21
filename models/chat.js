@@ -68,7 +68,7 @@ module.exports = (sequelize, Sequelize) => {
         {
           name: "fk_chat_user_idx",
           using: "BTREE",
-          fields: [{ name: "userId" }],
+          fields: [{ name: "id" }],
         },
       ],
     }
