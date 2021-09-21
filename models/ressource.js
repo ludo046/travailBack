@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
 
-      db.Ressource.belongsTo(db.User, {
+      models.Ressource.belongsTo(models.User, {
         foreignKey: "userId",
         as: "user_ressource",
       });
