@@ -14,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
         type : Sequelize.INTEGER,
         references: {
-          model: "Users",
+          model: "User",
           key: "id"
         }
       },
@@ -69,11 +69,11 @@ module.exports = (sequelize, Sequelize) => {
           using: "BTREE",
           fields: [{ name: "createdAt" }],
         },
-        // {
-        //   name: "fk_ressource_user_idx",
-        //   using: "BTREE",
-        //   fields: [{ name: "userId" }],
-        // },
+        {
+          name: "fk_ressource_user_idx",
+          using: "BTREE",
+          fields: [{ name: "userId" }],
+        },
       ],
     }
   );
