@@ -34,7 +34,7 @@ module.exports = {
                 .then(function(userFound){
                     if(!userFound){
                         bcrypt.hash(password, 10, function(err, bcryptedPassword){
-                            const newUser = models.Users.create({
+                            const newUser = models.User.create({
                                 firstname: firstname,
                                 lastname: lastname,
                                 age: age,
