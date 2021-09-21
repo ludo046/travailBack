@@ -70,7 +70,7 @@ module.exports = (sequelize, Sequelize) => {
           fields: [{ name: "createdAt" }],
         },
         {
-          name: "fk_chat_user_idx",
+          name: "fk_ressource_user_idx",
           using: "BTREE",
           fields: [{ name: "userId" }],
         },
