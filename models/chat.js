@@ -65,11 +65,11 @@ module.exports = (sequelize, Sequelize) => {
           using: "BTREE",
           fields: [{ name: "createdAt" }],
         },
-        {
-          name: "fk_chat_user_idx",
-          using: "BTREE",
-          fields: [{ name: "id" }],
-        },
+        // {
+        //   name: "fk_chat_user_idx",
+        //   using: "BTREE",
+        //   fields: [{ name: "id" }],
+        // },
       ],
     }
   );
