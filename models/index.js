@@ -43,12 +43,12 @@ db.Ressource.belongsTo(db.User, {
   as: "user_ressource",
 });
 
-db.User.hasMany(db.Chat, {
-  foreignKey:"userId",
-  as: "user_chat"
-});
+// db.User.hasMany(db.Chat, {
+//   foreignKey:"userId",
+//   as: "user_chat"
+// });
 
-db.Chat.belongsTo(db.User, {
-  foreignKey: "userId",
-  as: "user_chat"
-})
+// db.Chat.belongsTo(db.User, {
+//   foreignKey: "userId",
+//   as: "user_chat"
+// })
