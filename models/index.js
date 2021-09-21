@@ -39,7 +39,7 @@ db.User.hasMany(db.Ressource, {
 });
 
 db.Ressource.belongsTo(db.User, {
-  foreignKey: "userId",
+  foreignKey: "id",
   as: "user_ressource",
 });
 
@@ -49,6 +49,6 @@ db.User.hasMany(db.Chat, {
 });
 
 db.Chat.belongsTo(db.User, {
-  foreignKey: "userId",
+  foreignKey: "id",
   as: "user_chat"
 })
