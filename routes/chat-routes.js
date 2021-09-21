@@ -43,7 +43,7 @@ module.exports = {
               asyncLib.waterfall(
                 [
                   function (done) {
-                    return models.User.findOne({
+                    models.User.findOne({
                       where: { id: userId }
                     })
                       .then(function (userFound) {
