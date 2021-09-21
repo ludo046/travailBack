@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwtUtils = require('../utils/jwt.utils');
 const models = require('../models')
-const User = require('../models/user')
 const asyncLib = require('async');
 const {invalid} = require('joi');
 const registerSchema = require('../utils/joi/registerSchema');
@@ -28,7 +27,7 @@ module.exports = {
                     return res.status(400).json({ 'error' : `Vous n'avez pas l'age requis` });
                 }
 
-                models.Users.findOne({
+                models.User.findOne({
                     attributes: ['email'],
                     where: {email: email}
                 })
@@ -83,17 +82,17 @@ module.exports = {
                 })
                 .then(function(userFound){
                     if(userFound){
-                        bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt){
-                            if(resBycrypt){
+                        //bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt){
+                            //if(resBycrypt){
                                 return res.status(200).json({
                                     'userId' : userFound.id,
                                     'isAdmin' : userFound.isAdmin,
                                     'token' : jwtUtils.generateTokenForUser(userFound)
                                 })
-                            } else {
-                                return res.status(403).json({'error': 'mot de passe incorrect'});
-                            }
-                        })
+                            //} else {
+                                //return res.status(403).json({'error': 'mot de passe incorrect'});
+                            //}
+                        //})
                     } else {
                         return res.status(404).json({'error': 'utilisateur inexistant '})
                     }
