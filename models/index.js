@@ -1,37 +1,56 @@
-'use strict';
+"use strict";
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.json')[env];
+require("dotenv").config();
+
+const dbConfig = require("../config/db.config.js");
+const Sequelize = require("sequelize");
+const sequelize = new Sequelize(
+  process.env.DB,
+  process.env.USERS,
+  process.env.PASSWORD,
+  {
+    host: process.env.HOST,
+    dialect: dbConfig.dialect,
+    operatorsAliases: false,
+
+    pool: {
+      max: dbConfig.pool.max,
+      min: dbConfig.pool.min,
+      acquire: dbConfig.pool.acquire,
+      idle: dbConfig.pool.idle,
+    },
+  }
+);
 const db = {};
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file));
-    db[model.name] = model;
-  });
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+
+db.User = require("./user")(Sequelize,sequelize);
+db.Ressource = require('./ressource')(Sequelize,sequelize);
+db.Chat = require('./chat')(Sequelize,sequelize);
+
+
+db.User.hasMany(db.Ressource, {
+  foreignKey: "userId",
+  as: "user_ressource",
 });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+db.Ressource.belongsTo(db.User, {
+  foreignKey: "userId",
+  as: "user_ressource",
+});
 
-module.exports = db;
+db.User.hasMany(db.Chat, {
+  foreignKey:"userId",
+  as: "user_chat"
+});
+
+db.Chat.belongsTo(db.User, {
+  foreignKey: "userId",
+  as: "user_chat"
+})
+
+module.exports = db
