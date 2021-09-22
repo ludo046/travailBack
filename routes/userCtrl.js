@@ -78,7 +78,7 @@ module.exports = {
                 if(email == null || password == null){
                     return res.status(400).json({'error' : 'tous les champs ne sont pas remplis'});
                 }
-                models.User.findOne({
+                models.Users.findOne({
                     where: {email: email}
                 })
                 .then(function(userFound){
