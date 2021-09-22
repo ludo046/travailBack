@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     
   };
   Ressource.init({
-    userId: DataTypes.INTEGER,
+    UserId: DataTypes.INTEGER,
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     image: DataTypes.STRING,

@@ -125,7 +125,7 @@ module.exports = {
         {
           model: models.User,
           attributes: ["firstname", "lastname"],
-          as: "user_ressource"
+          //as: "user_ressource"
         },
       ],
     })
@@ -156,7 +156,7 @@ module.exports = {
         {
           model: models.User,
           attributes: ["firstname", "lastname"],
-          as: "user_ressource"
+          //as: "user_ressource"
         },
       ],
     })
