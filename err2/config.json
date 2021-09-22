@@ -1,9 +1,0 @@
-{
-  "development": {
-    "username": "ludovic",
-    "password": "ludo046",
-    "database": "database_development_travailAvecLeSourire",
-    "host": "localhost",
-    "dialect": "mysql"
-  }
-}
