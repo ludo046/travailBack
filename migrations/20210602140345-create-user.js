@@ -16,16 +16,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      password: {
-        allowNull: false,
+      age: {
+        allowNull: true,
         type: Sequelize.STRING
       },
       email: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      datebirth: {
-        allowNull: true,
+      password: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       picture: {
