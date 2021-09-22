@@ -77,7 +77,7 @@ module.exports = {
             function (userFound, done) {
               if (userFound) {
                 models.Ressource.create({
-                  userId: userFound.id,
+                  UserId: userFound.id,
                   title: title,
                   content: content,
                   project: project,
