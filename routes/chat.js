@@ -56,7 +56,7 @@ module.exports = {
                   function (userFound, done) {
                     if (userFound) {
                       models.Chat.create({
-                        userId: userFound.id,
+                        UserId: userFound.id,
                         message: message,
                         image: attachment,
                         movie: movie,
@@ -178,7 +178,7 @@ module.exports = {
                 function (userFound, done) {
                   if (userFound) {
                     models.Chat.create({
-                      userId: userFound.id,
+                      UserId: userFound.id,
                       contactId: contactId,
                       message: message,
                       image: attachment,
