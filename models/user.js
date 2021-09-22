@@ -12,10 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.User.hasMany(models.Ressource, {
-        foreignKey: "userId",
+        foreignKey: "userId"
       });
       models.User.hasMany(models.Chat, {
         foreignKey:"userId",
+        as: 'user_chat'
       });
     }
   };
