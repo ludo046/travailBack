@@ -166,7 +166,10 @@ module.exports = {
                 const lastname = req.body.lastname;
                 const email = req.body.email;
                 const age = req.body.age;
-                const picture = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+                if(req.file){
+                  const picture = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;  
+                }
+                
         
                 if(userId <= 0 ){
                     return res.status(400).json({'error': `vous n'êtes pas identifié`});
@@ -177,7 +180,6 @@ module.exports = {
                         models.User.findOne({
                             where: {id: userId}
                         }).then(function(userFound){
-                            console.log(userFound);
                             done(null, userFound);
                         }).catch(function(err){
                             return res.status(500).json({message: err.message})
