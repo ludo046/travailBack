@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Chat.init({
-    messageId: DataTypes.INTEGER,
+    UserId: DataTypes.INTEGER,
     contactId: DataTypes.INTEGER,
     message: DataTypes.STRING,
     image: DataTypes.STRING,
