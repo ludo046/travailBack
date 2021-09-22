@@ -166,8 +166,9 @@ module.exports = {
                 const lastname = req.body.lastname;
                 const email = req.body.email;
                 const age = req.body.age;
+                const picture = "";
                 if(req.file){
-                  const picture = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;  
+                    picture = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;  
                 }
                 
         
