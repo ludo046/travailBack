@@ -96,8 +96,8 @@ module.exports = {
           include: [
             {
               model: models.User,
-              as: "user_chat",
-              attributes: ["firstName", "lastName", "picture"],
+              //as: "user_chat",
+              attributes: ["firstname", "lastname", "picture"],
             }
           ],
         })
