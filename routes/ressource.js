@@ -67,7 +67,6 @@ module.exports = {
                 where: { id: userId }
               })
                 .then(function (userFound) {
-                  console.log(userFound);
                   done(null, userFound);
                 })
                 .catch(function(error){
@@ -137,7 +136,6 @@ module.exports = {
         }
       })
       .catch(function (err) {
-        console.log(err);
         res.status(500).json({ error: "invalid fields" });
       });
   },
@@ -168,7 +166,6 @@ module.exports = {
         }
       })
       .catch(function (err) {
-        console.log(err);
         res.status(500).json({ error: "invalid fields" });
       });
   },
@@ -395,8 +392,6 @@ module.exports = {
     let headerAuth = req.headers["authorization"];
     let userId = jwtUtils.getUserId(headerAuth);
     const ressourceId = req.params.ressourceId;
-    console.log(userId);
-    console.log(ressourceId);
 
 
     if(userId <= 0){

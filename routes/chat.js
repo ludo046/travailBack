@@ -109,7 +109,7 @@ module.exports = {
             }
           })
           .catch(function (err) {
-            console.log(err);
+
             res.status(500).json({ error: "invalid fields" });
           });
       },
@@ -122,8 +122,6 @@ module.exports = {
             let userId = Number(jwtUtils.getUserId(headerAuth));
             let contactId = req.body.contactId;
             let roomId = req.body.roomId
-            console.log(contactId);
-            console.log(roomId);
     
             let message = null;
             let attachment = null;
