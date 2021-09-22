@@ -15,8 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId"
       });
       models.User.hasMany(models.Chat, {
-        foreignKey:"userId",
-        as: 'user_chat'
+        foreignKey:"userId"
       });
     }
   };
