@@ -7,7 +7,7 @@ const registerSchema = require('../utils/joi/registerSchema');
 const loginSchema = require('../utils/joi/loginSchema');
 const updateUserSchema = require('../utils/joi/updateProfile');
 const mailgun = require("mailgun-js");
-const DOMAIN = 'sandboxa94d26bdbde94575b62204944b85f618.mailgun.org';
+const DOMAIN = process.env.SANDBOX;
 const mg = mailgun({apiKey: process.env.MAILGUN_APIKEY, domain: DOMAIN});
 require("dotenv").config();
 
