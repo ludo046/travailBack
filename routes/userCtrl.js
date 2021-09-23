@@ -52,7 +52,7 @@ module.exports = {
                                 //     token: jwtUtils.generateTokenForUser(newUser)dd
                                 // })
                                 let token = jwtUtils.generateTokenForUser(newUser);
-                               let transport = nodemailer.createTransport(SMTPTransport({
+                               let transport = nodemailer.createTransport(smtpTransport({
                                    service:"Gmail",
                                    host: 'smtp.Gmail.com',
                                    port: 587,
