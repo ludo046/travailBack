@@ -7,7 +7,6 @@ const registerSchema = require('../utils/joi/registerSchema');
 const loginSchema = require('../utils/joi/loginSchema');
 const updateUserSchema = require('../utils/joi/updateProfile');
 const nodemailer = require('nodemailer');
-const { message } = require('../utils/joi/registerSchema');
 require("dotenv").config();
 
 
@@ -54,15 +53,15 @@ module.exports = {
                                 let token = jwtUtils.generateTokenForUser(newUser);
                                const transport = nodemailer.createTransport({
                                     host: 'smtp.gmail.com',
-                                    port: 465,
-                                    secure: true,
+                                    port: 587,
+                                    secure: false,
                                    service:"Gmail",
                                    auth: {
                                        user: process.env.USER,
                                        pass: process.env.PASS
                                    }
                                });
-                               transport.sendMail({
+                               let mailOption = {
                                    from: process.env.USER,
                                    to: newUser.email,
                                    subject: 'valider votre compte',
@@ -70,7 +69,15 @@ module.exports = {
                                           <h2>Bonjour ${newUser.firstname},</h2>
                                           <p>Merci pour ton inscription sur travailAvecLeSourire, pour valider votre compte merci de cliquer sur le bouton ci-dessous.</p>
                                           <a href='http://travailaveclesourire/home/?${token}'><button>Validez votre compte</button></a>`
-                               });
+                               };
+                               
+                               transport.sendMail(mailOption, (error, info) => {
+                                   if(error){
+                                       return console.log(error);
+                                   }
+                                   console.log('message send :', info.messageId);
+                                   console.log('preview url : ', nodemailer.getTestMessageUrl(info));
+                               })
 
                             })
                             .catch(function(error){
