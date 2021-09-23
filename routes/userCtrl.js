@@ -58,8 +58,8 @@ module.exports = {
                                    port: 587,
                                    secure: true,
                                    auth: {
-                                       user: process.env.USER,
-                                       pass: process.env.PASS
+                                       user: 'travailaveclesourire@gmail.com',
+                                       pass: 'Fripon046'
                                    }
                                });
                                let mailOption = {
