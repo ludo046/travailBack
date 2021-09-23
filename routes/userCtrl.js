@@ -6,10 +6,9 @@ const {invalid} = require('joi');
 const registerSchema = require('../utils/joi/registerSchema');
 const loginSchema = require('../utils/joi/loginSchema');
 const updateUserSchema = require('../utils/joi/updateProfile');
-const mailgun = require("mailgun-js");
-const DOMAIN = process.env.SANDBOX;
-const mg = mailgun({apiKey: process.env.MAILGUN_APIKEY, domain: DOMAIN});
+const nodemailer = require('nodemailer');
 require("dotenv").config();
+
 
 
 module.exports = {
@@ -51,15 +50,23 @@ module.exports = {
                                 //     'userId' : newUser.id,
                                 //     token: jwtUtils.generateTokenForUser(newUser)dd
                                 // })
-                                const data = {
-                                    from: 'noreply@travailaveclesourire.com',
-                                    to: newUser.email,
-                                    subject: 'Hello',
-                                    text: 'Testing some Mailgun awesomness!'
-                                };
-                                mg.messages().send(data, function (error, body) {
-                                    console.log(body);
-                                });
+                                const token = jwtUtils.generateTokenForUser(newUser);
+                               const transport = nodemailer.createTransport({
+                                   service:"Gmail",
+                                   auth: {
+                                       user: process.env.USER,
+                                       pass: process.env.PASS
+                                   }
+                               });
+                               transport.sendMail({
+                                   from: process.env.USER,
+                                   to: newUser.email,
+                                   subject: 'valider votre compte',
+                                   html: `<h1>Email de Confirmation</h1>
+                                          <h2>Bonjour ${newUser.firstname},</h2>
+                                          <p>Merci pour ton inscription sur travailAvecLeSourire, pour valider votre compte merci de cliquer sur le bouton ci-dessous.</p>
+                                          <a href='http://travailaveclesourire/home/?${token}'><button>Validez votre compte</button></a>`
+                               });
                             })
                             .catch(function(error){
                                 return res.status(500).json({error})
