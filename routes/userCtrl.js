@@ -5,8 +5,11 @@ const asyncLib = require('async');
 const {invalid} = require('joi');
 const registerSchema = require('../utils/joi/registerSchema');
 const loginSchema = require('../utils/joi/loginSchema');
-const updateUserSchema = require('../utils/joi/updateProfile')
-const user = require('../models/user');
+const updateUserSchema = require('../utils/joi/updateProfile');
+const mailgun = require("mailgun-js");
+const DOMAIN = 'sandboxa94d26bdbde94575b62204944b85f618.mailgun.org';
+const mg = mailgun({apiKey: process.env.MAILGUN_APIKEY, domain: DOMAIN});
+require("dotenv").config();
 
 
 module.exports = {
@@ -44,10 +47,19 @@ module.exports = {
                                 isAdmin: 0
                             })
                             .then(function(newUser){
-                                return res.status(201).json({
-                                    'userId' : newUser.id,
-                                    token: jwtUtils.generateTokenForUser(newUser)
-                                })
+                                // return res.status(201).json({
+                                //     'userId' : newUser.id,
+                                //     token: jwtUtils.generateTokenForUser(newUser)
+                                // })
+                                const data = {
+                                    from: 'noreply@travailaveclesourire.com',
+                                    to: newUser.email,
+                                    subject: 'Hello',
+                                    text: 'Testing some Mailgun awesomness!'
+                                };
+                                mg.messages().send(data, function (error, body) {
+                                    console.log(body);
+                                });
                             })
                             .catch(function(error){
                                 return res.status(500).json({error})
