@@ -52,17 +52,13 @@ module.exports = {
                                 //     token: jwtUtils.generateTokenForUser(newUser)dd
                                 // })
                                 let token = jwtUtils.generateTokenForUser(newUser);
-                               let transport = nodemailer.createTransport(smtpTransport({
+                               let transport = nodemailer.createTransport({
                                    service:"Gmail",
-                                   host: 'smtp.Gmail.com',
-                                //    port: 587,
-                                //    secure: true,
-                                //    requireTLS: true,
                                    auth: {
                                        user: process.env.USER,
                                        pass: process.env.PASS
                                    }
-                               }));
+                               });
                                let mailOption = {
                                    from: process.env.USER,
                                    to: newUser.email,
