@@ -55,9 +55,9 @@ module.exports = {
                                let transport = nodemailer.createTransport(smtpTransport({
                                    service:"Gmail",
                                    host: 'smtp.Gmail.com',
-                                   port: 587,
-                                   secure: true,
-                                   requireTLS: true,
+                                //    port: 587,
+                                //    secure: true,
+                                //    requireTLS: true,
                                    auth: {
                                        user: process.env.USER,
                                        pass: process.env.PASS
