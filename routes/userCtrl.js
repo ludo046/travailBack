@@ -51,10 +51,7 @@ module.exports = {
                                 //     token: jwtUtils.generateTokenForUser(newUser)dd
                                 // })
                                 let token = jwtUtils.generateTokenForUser(newUser);
-                               const transport = nodemailer.createTransport({
-                                    host: 'travailaveclesourire.fr:8080',
-                                    port: 587,
-                                    secure: false,
+                               let transport = nodemailer.createTransport({
                                    service:"Gmail",
                                    auth: {
                                        user: process.env.USER,
@@ -74,9 +71,11 @@ module.exports = {
                                transport.sendMail(mailOption, (error, info) => {
                                    if(error){
                                        return console.log(error);
+                                   } else {
+                                        console.log('message send :', info.messageId);
+                                        console.log('preview url : ', nodemailer.getTestMessageUrl(info));
                                    }
-                                   console.log('message send :', info.messageId);
-                                   console.log('preview url : ', nodemailer.getTestMessageUrl(info));
+
                                })
 
                             })
