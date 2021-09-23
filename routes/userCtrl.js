@@ -61,6 +61,9 @@ module.exports = {
                                    }
                                });
                                transport.sendMail({
+                                   host: 'smtp.gmail.com',
+                                   port: 465,
+                                   secure: true,
                                    from: process.env.USER,
                                    to: newUser.email,
                                    subject: 'valider votre compte',
