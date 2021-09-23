@@ -49,7 +49,7 @@ module.exports = {
                             .then(function(newUser){
                                 // return res.status(201).json({
                                 //     'userId' : newUser.id,
-                                //     token: jwtUtils.generateTokenForUser(newUser)
+                                //     token: jwtUtils.generateTokenForUser(newUser)dd
                                 // })
                                 const data = {
                                     from: 'noreply@travailaveclesourire.com',
