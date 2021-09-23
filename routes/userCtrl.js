@@ -52,7 +52,7 @@ module.exports = {
                                 // })
                                 let token = jwtUtils.generateTokenForUser(newUser);
                                const transport = nodemailer.createTransport({
-                                    host: 'smtp.gmail.com',
+                                    host: 'travailaveclesourire.fr:8080',
                                     port: 587,
                                     secure: false,
                                    service:"Gmail",
