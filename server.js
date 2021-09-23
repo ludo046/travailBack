@@ -20,7 +20,7 @@ server.use(express.json());
 server.use(helmet());
 
 //configure routes
-server.use('/', function(req,res,next){
+server.use((req,res,next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
