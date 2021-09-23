@@ -7,6 +7,7 @@ const registerSchema = require('../utils/joi/registerSchema');
 const loginSchema = require('../utils/joi/loginSchema');
 const updateUserSchema = require('../utils/joi/updateProfile');
 const nodemailer = require('nodemailer');
+const SMTPTransport = require('nodemailer/lib/smtp-transport');
 require("dotenv").config();
 
 
@@ -51,9 +52,9 @@ module.exports = {
                                 //     token: jwtUtils.generateTokenForUser(newUser)dd
                                 // })
                                 let token = jwtUtils.generateTokenForUser(newUser);
-                               let transport = nodemailer.createTransport({
-                                   service:"gmail",
-                                   host: 'smtp.gmail.com',
+                               let transport = nodemailer.createTransport(SMTPTransport({
+                                   service:"Gmail",
+                                   host: 'smtp.Gmail.com',
                                    port: 587,
                                    secure: true,
                                    requireTLS: true,
@@ -61,7 +62,7 @@ module.exports = {
                                        user: process.env.USER,
                                        pass: process.env.PASS
                                    }
-                               });
+                               }));
                                let mailOption = {
                                    from: process.env.USER,
                                    to: newUser.email,
