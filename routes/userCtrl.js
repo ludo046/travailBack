@@ -52,8 +52,10 @@ module.exports = {
                                 //     token: jwtUtils.generateTokenForUser(newUser)dd
                                 // })
                                 let token = jwtUtils.generateTokenForUser(newUser);
-                                console.log(token);
                                const transport = nodemailer.createTransport({
+                                    host: 'smtp.gmail.com',
+                                    port: 465,
+                                    secure: true,
                                    service:"Gmail",
                                    auth: {
                                        user: process.env.USER,
@@ -61,9 +63,6 @@ module.exports = {
                                    }
                                });
                                transport.sendMail({
-                                   host: 'smtp.gmail.com',
-                                   port: 465,
-                                   secure: true,
                                    from: process.env.USER,
                                    to: newUser.email,
                                    subject: 'valider votre compte',
