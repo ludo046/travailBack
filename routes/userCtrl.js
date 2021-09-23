@@ -7,6 +7,7 @@ const registerSchema = require('../utils/joi/registerSchema');
 const loginSchema = require('../utils/joi/loginSchema');
 const updateUserSchema = require('../utils/joi/updateProfile');
 const nodemailer = require('nodemailer');
+const { message } = require('../utils/joi/registerSchema');
 require("dotenv").config();
 
 
@@ -50,7 +51,8 @@ module.exports = {
                                 //     'userId' : newUser.id,
                                 //     token: jwtUtils.generateTokenForUser(newUser)dd
                                 // })
-                                const token = jwtUtils.generateTokenForUser(newUser);
+                                let token = jwtUtils.generateTokenForUser(newUser);
+                                console.log(token);
                                const transport = nodemailer.createTransport({
                                    service:"Gmail",
                                    auth: {
@@ -67,6 +69,7 @@ module.exports = {
                                           <p>Merci pour ton inscription sur travailAvecLeSourire, pour valider votre compte merci de cliquer sur le bouton ci-dessous.</p>
                                           <a href='http://travailaveclesourire/home/?${token}'><button>Validez votre compte</button></a>`
                                });
+
                             })
                             .catch(function(error){
                                 return res.status(500).json({error})
