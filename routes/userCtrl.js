@@ -113,13 +113,9 @@ module.exports = {
         .then((user) => {
             if(!user){
                 return res.status(404).json({message : 'user not found'});
+            } else {
+                return true
             }
-            user.status = "active";
-            user.save((err) => {
-                if(err){
-                    return res.status(500).json({error : message.err})
-                }
-            })
         })
         .catch((e) => console.log('error', e));
     },
