@@ -9,6 +9,7 @@ const updateUserSchema = require('../utils/joi/updateProfile');
 const nodemailer = require('nodemailer');
 const SMTPTransport = require('nodemailer/lib/smtp-transport');
 const { message } = require('../utils/joi/registerSchema');
+const { generateTokenForUser } = require('../utils/jwt.utils');
 require("dotenv").config();
 
 
@@ -114,7 +115,11 @@ module.exports = {
             if(!user){
                 return res.status(404).json({message : 'user not found'});
             } else {
-                res.send(true)
+                res.send({
+                    connection: true,
+                    token: generateTokenForUser(userId),
+                    userId: userId
+                })
             }
         })
         .catch((e) => console.log('error', e));
