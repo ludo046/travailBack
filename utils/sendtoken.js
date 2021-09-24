@@ -1,0 +1,1 @@
+localStorage.setItem[`session`] = JSON.stringify(token)
