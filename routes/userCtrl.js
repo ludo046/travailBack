@@ -104,7 +104,7 @@ module.exports = {
     },
 
     verificationUser: function(req,res){
-        const token = req.params.token;
+        const token = req.body.token;
         const userId = jwtUtils.getUserId(token)
 
         models.User.findOne({
