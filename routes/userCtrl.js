@@ -70,7 +70,7 @@ module.exports = {
                                    html: `<h1>Email de Confirmation</h1>
                                           <h2>Bonjour ${newUser.firstname},</h2>
                                           <p>Merci pour ton inscription sur travailAvecLeSourire, pour valider votre compte merci de cliquer sur le bouton ci-dessous.</p>
-                                          <a href='http://travailaveclesourire.fr/welcome/:${token}'><button>Validez votre compte</button></a>`
+                                          <a href='http://travailaveclesourire.fr/welcome/${token}'><button>Validez votre compte</button></a>`
                                };
                                
                                transport.sendMail(mailOption, (error, info) => {
