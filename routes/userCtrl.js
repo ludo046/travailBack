@@ -8,6 +8,7 @@ const loginSchema = require('../utils/joi/loginSchema');
 const updateUserSchema = require('../utils/joi/updateProfile');
 const nodemailer = require('nodemailer');
 const SMTPTransport = require('nodemailer/lib/smtp-transport');
+const { message } = require('../utils/joi/registerSchema');
 require("dotenv").config();
 
 
@@ -100,6 +101,27 @@ module.exports = {
         }catch (error){
             res.status(400).json({error})
         }
+    },
+
+    verificationUser: function(req,res){
+        const token = req.params.token;
+        const userId = jwtUtils.getUserId(token)
+
+        models.User.findOne({
+            userId: userId
+        })
+        .then((user) => {
+            if(!user){
+                return res.status(404).json({message : 'user not found'});
+            }
+            user.status = "active";
+            user.save((err) => {
+                if(err){
+                    return res.status(500).json({error : message.err})
+                }
+            })
+        })
+        .catch((e) => console.log('error', e));
     },
 
     login: async function(req, res) {
