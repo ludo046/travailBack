@@ -114,7 +114,7 @@ module.exports = {
             if(!user){
                 return res.status(404).json({message : 'user not found'});
             } else {
-                return true
+                res.send(true)
             }
         })
         .catch((e) => console.log('error', e));
