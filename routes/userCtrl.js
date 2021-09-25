@@ -71,11 +71,11 @@ module.exports = {
                                let mailOption = {
                                    from: process.env.USER,
                                    to: newUser.email,
-                                   subject: 'valider votre compte',
+                                   subject: 'valider ton compte',
                                    html: `<h1>Email de Confirmation</h1>
                                           <h2>Bonjour ${newUser.firstname},</h2>
-                                          <p>Merci pour ton inscription sur travailAvecLeSourire, pour valider votre compte merci de cliquer sur le bouton ci-dessous.</p>
-                                          <a href='http://travailaveclesourire.fr/welcome/${code}'><button>Validez votre compte</button></a>`
+                                          <p>Merci pour ton inscription sur travailAvecLeSourire, pour valider ton compte recopie le code ci-dessous.</p>
+                                          <p>Ton code de confirmation : ${code}</p>`
                                };
                                
                                transport.sendMail(mailOption, (error, info) => {
@@ -111,15 +111,22 @@ module.exports = {
     verificationUser: function(req,res){
         const code = req.body.code;
 
-        models.user.findOne({
+        models.User.findOne({
             where: {code: code}
         })
         .then(function(user){
             if(user){
-                res.send({
-                    'userId': user.id,
-                    'isAdmin': user.isAdmin,
-                    'token': jwtUtils.generateTokenForUser(user)
+                models.User.update({
+                    activate: true
+                }).then(() => {
+                    res.send({
+                        'userId': user.id,
+                        'isAdmin': user.isAdmin,
+                        'token': jwtUtils.generateTokenForUser(user)
+                    })
+                })
+                .catch(function(error){
+                    return res.status(400).json({message: error.message})
                 })
             } else {
                 return res.status(400).json({message: 'code de validation incorrect'})
