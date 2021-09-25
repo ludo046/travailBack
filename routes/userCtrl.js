@@ -41,7 +41,26 @@ module.exports = {
                     if(!userFound){
                         const code = Math.floor(100000 + Math.random() * 900000)
                         console.log(code);
-        
+
+                        bcrypt.hash(password, 10, function(err, bcryptedPassword){
+                            const newUser = models.User.create({
+                                firstname: firstname,
+                                lastname: lastname,
+                                age: age,
+                                email: email,
+                                password: bcryptedPassword,
+                                isAdmin: 0,
+                                activate: false,
+                                code: code
+                            })
+                            .then(function(newUser){
+                                return res.status(201).json({message : 'utilisateur créé'})
+                            })
+                            .catch(function(error){
+                                return res.status(500).json({error})
+                            })
+                        })
+
                         let transport = nodemailer.createTransport({
                             service:"gmail",
                             host: 'smtp.gmail.com',
@@ -70,25 +89,6 @@ module.exports = {
                                  console.log('preview url : ', nodemailer.getTestMessageUrl(info));
                             }
 
-                        })
-
-                        bcrypt.hash(password, 10, function(err, bcryptedPassword){
-                            const newUser = models.User.create({
-                                firstname: firstname,
-                                lastname: lastname,
-                                age: age,
-                                email: email,
-                                password: bcryptedPassword,
-                                isAdmin: 0,
-                                activate: false,
-                                code: code
-                            })
-                            .then(function(newUser){
-                                return res.status(201).json({message : 'utilisateur créé'})
-                            })
-                            .catch(function(error){
-                                return res.status(500).json({error})
-                            })
                         })
                     } else {
                         return res.status(409).json({ 'error' : 'un compte utilisateur existe déjà avec cette adress mail' });
