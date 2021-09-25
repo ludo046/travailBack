@@ -40,6 +40,7 @@ module.exports = {
                 .then(function(userFound){
                     if(!userFound){
                         const code = Math.floor(100000 + Math.random() * 900000)
+                        console.log(code);
         
                         let transport = nodemailer.createTransport({
                             service:"gmail",
