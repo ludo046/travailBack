@@ -39,9 +39,7 @@ module.exports = {
                 })
                 .then(function(userFound){
                     if(!userFound){
-                        const code = Math.floor(100000 + Math.random() * 900000)
-                        console.log(code);
-
+                        
                         bcrypt.hash(password, 10, function(err, bcryptedPassword){
                             const newUser = models.User.create({
                                 firstname: firstname,
@@ -49,46 +47,48 @@ module.exports = {
                                 age: age,
                                 email: email,
                                 password: bcryptedPassword,
-                                isAdmin: 0,
-                                activate: false,
-                                code: code
+                                isAdmin: 0
                             })
                             .then(function(newUser){
-                                return res.status(201).json({message : 'utilisateur créé'})
+                                // return res.status(201).json({
+                                //     'userId' : newUser.id,
+                                //     token: jwtUtils.generateTokenForUser(newUser)dd
+                                // })
+                                let token = jwtUtils.generateTokenForUser(newUser);
+                               let transport = nodemailer.createTransport({
+                                   service:"gmail",
+                                   host: 'smtp.gmail.com',
+                                   port: 587,
+                                   secure: true,
+                                   auth: {
+                                       user: 'travailaveclesourire@gmail.com',
+                                       pass: 'Fripon046'
+                                   }
+                               });
+                               let mailOption = {
+                                   from: process.env.USER,
+                                   to: newUser.email,
+                                   subject: 'valider votre compte',
+                                   html: `<h1>Email de Confirmation</h1>
+                                          <h2>Bonjour ${newUser.firstname},</h2>
+                                          <p>Merci pour ton inscription sur travailAvecLeSourire, pour valider votre compte merci de cliquer sur le bouton ci-dessous.</p>
+                                          <a href='http://travailaveclesourire.fr/welcome/${token}'><button>Validez votre compte</button></a>`
+                               };
+                               
+                               transport.sendMail(mailOption, (error, info) => {
+                                   if(error){
+                                       return console.log(error);
+                                   } else {
+                                        console.log('message send :', info.messageId);
+                                        console.log('preview url : ', nodemailer.getTestMessageUrl(info));
+                                   }
+
+                               })
+
                             })
                             .catch(function(error){
                                 return res.status(500).json({error})
                             })
-                        })
-
-                        let transport = nodemailer.createTransport({
-                            service:"gmail",
-                            host: 'smtp.gmail.com',
-                            port: 587,
-                            secure: true,
-                            auth: {
-                                user: 'travailaveclesourire@gmail.com',
-                                pass: 'Fripon046'
-                            }
-                        });
-                        let mailOption = {
-                            from: process.env.USER,
-                            to: newUser.email,
-                            subject: 'valider votre compte',
-                            html: `<h1>Email de Confirmation</h1>
-                                   <h2>Bonjour ${newUser.firstname},</h2>
-                                   <p>Merci pour ton inscription sur travailAvecLeSourire, pour valider votre compte merci de cliquer sur le bouton ci-dessous.</p>
-                                   <a href='http://travailaveclesourire.fr/welcome/${code}'><button>Validez votre compte</button></a>`
-                        };
-                        
-                        transport.sendMail(mailOption, (error, info) => {
-                            if(error){
-                                return console.log(error);
-                            } else {
-                                 console.log('message send :', info.messageId);
-                                 console.log('preview url : ', nodemailer.getTestMessageUrl(info));
-                            }
-
                         })
                     } else {
                         return res.status(409).json({ 'error' : 'un compte utilisateur existe déjà avec cette adress mail' });
@@ -106,22 +106,24 @@ module.exports = {
     },
 
     verificationUser: function(req,res){
-        let code = req.body.code;
+        const token = req.body.token;
+        const userId = jwtUtils.getUserId(token)
 
         models.User.findOne({
-            where: { code: code }
+            userId: userId
         })
-        .then(function(user){
-            if(user){
-                res.send({
-                    'userId': user.id,
-                    'isAdmin': user.isAdmin,
-                    'token': jwtUtils.generateTokenForUser(user)
-                })
+        .then((user) => {
+            if(!user){
+                return res.status(404).json({message : 'user not found'});
             } else {
-                return res.status(400).json({message: 'code de confirmation incorrect'})
+                res.send({
+                    connection: true,
+                    token: generateTokenForUser(userId),
+                    userId: userId
+                })
             }
         })
+        .catch((e) => console.log('error', e));
     },
 
     login: async function(req, res) {
