@@ -39,6 +39,8 @@ module.exports = {
                 })
                 .then(function(userFound){
                     if(!userFound){
+
+                        const code = Math.floor(100000 + Math.random() * 900000);
                         
                         bcrypt.hash(password, 10, function(err, bcryptedPassword){
                             const newUser = models.User.create({
@@ -46,6 +48,7 @@ module.exports = {
                                 lastname: lastname,
                                 age: age,
                                 email: email,
+                                code: code,
                                 password: bcryptedPassword,
                                 isAdmin: 0
                             })
@@ -72,7 +75,7 @@ module.exports = {
                                    html: `<h1>Email de Confirmation</h1>
                                           <h2>Bonjour ${newUser.firstname},</h2>
                                           <p>Merci pour ton inscription sur travailAvecLeSourire, pour valider votre compte merci de cliquer sur le bouton ci-dessous.</p>
-                                          <a href='http://travailaveclesourire.fr/welcome/${token}'><button>Validez votre compte</button></a>`
+                                          <a href='http://travailaveclesourire.fr/welcome/${code}'><button>Validez votre compte</button></a>`
                                };
                                
                                transport.sendMail(mailOption, (error, info) => {
@@ -106,24 +109,22 @@ module.exports = {
     },
 
     verificationUser: function(req,res){
-        const token = req.body.token;
-        const userId = jwtUtils.getUserId(token)
+        const code = req.body.code;
 
-        models.User.findOne({
-            userId: userId
+        models.user.findOne({
+            where: {code: code}
         })
-        .then((user) => {
-            if(!user){
-                return res.status(404).json({message : 'user not found'});
-            } else {
+        .then(function(user){
+            if(user){
                 res.send({
-                    connection: true,
-                    token: generateTokenForUser(userId),
-                    userId: userId
+                    'userId': user.id,
+                    'isAdmin': user.isAdmin,
+                    'token': jwtUtils.generateTokenForUser(user)
                 })
+            } else {
+                return res.status(400).json({message: 'code de validation incorrect'})
             }
         })
-        .catch((e) => console.log('error', e));
     },
 
     login: async function(req, res) {
