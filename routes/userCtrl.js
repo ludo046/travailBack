@@ -76,7 +76,7 @@ module.exports = {
                                    html: `<h1>Email de Confirmation</h1>
                                           <h2>Bonjour ${newUser.firstname},</h2>
                                           <p>Merci pour ton inscription sur travailAvecLeSourire, pour valider ton compte recopie le code ci-dessous.</p>
-                                          <p>Ton code de confirmation : ${newUser.code}</p>`
+                                          <p>Ton code de confirmation : ${code}</p>`
                                };
                                
                                transport.sendMail(mailOption, (error, info) => {
