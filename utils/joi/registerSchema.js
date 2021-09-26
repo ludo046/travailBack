@@ -17,7 +17,9 @@ const Joi = require('joi');
     
             password: Joi.string()
             .min(8)
-            .max(16)
+            .max(16),
+
+            code: Joi.string()
     
             
             

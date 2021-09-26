@@ -25,6 +25,7 @@ module.exports = {
                 const age = req.body.age;
                 const email = req.body.email;
                 const password = req.body.password;
+                const code = req.body.code;
 
                 if(firstname == null || lastname == null || age == null || email == null ||password == null) {
                     return res.status(400).json({ 'error' : 'tous les champs de sont pas remplis' });
@@ -50,7 +51,7 @@ module.exports = {
                                 email: email,
                                 password: bcryptedPassword,
                                 isAdmin: 0,
-                                code: JSON.stringify(Math.floor(000000 + Math.random() * 900000))
+                                code: code
                             })
                             .then(function(newUser){
                                 // return res.status(201).json({
