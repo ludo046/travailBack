@@ -26,6 +26,8 @@ module.exports = {
                 const email = req.body.email;
                 const password = req.body.password;
                 const code = req.body.code;
+                console.log(req.body);
+
 
                 if(firstname == null || lastname == null || age == null || email == null ||password == null) {
                     return res.status(400).json({ 'error' : 'tous les champs de sont pas remplis' });
