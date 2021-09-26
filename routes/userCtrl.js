@@ -26,6 +26,7 @@ module.exports = {
                 const email = req.body.email;
                 const password = req.body.password;
                 const code = Math.floor(100000 + Math.random() * 900000);
+                console.log(code);
 
                 if(firstname == null || lastname == null || age == null || email == null ||password == null) {
                     return res.status(400).json({ 'error' : 'tous les champs de sont pas remplis' });
