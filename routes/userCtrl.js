@@ -25,7 +25,7 @@ module.exports = {
                 const age = req.body.age;
                 const email = req.body.email;
                 const password = req.body.password;
-                let code = Math.floor(000000 + Math.random() * 900000);
+                let code = JSON.parse(Math.floor(000000 + Math.random() * 900000));
                 console.log(code);
 
                 if(firstname == null || lastname == null || age == null || email == null ||password == null) {
