@@ -25,8 +25,6 @@ module.exports = {
                 const age = req.body.age;
                 const email = req.body.email;
                 const password = req.body.password;
-                let code = JSON.parse(Math.floor(000000 + Math.random() * 900000));
-                console.log(code);
 
                 if(firstname == null || lastname == null || age == null || email == null ||password == null) {
                     return res.status(400).json({ 'error' : 'tous les champs de sont pas remplis' });
@@ -41,7 +39,9 @@ module.exports = {
                 })
                 .then(function(userFound){
                     if(!userFound){
-                        
+                        let code = Math.floor(000000 + Math.random() * 900000);
+                        console.log(code);
+
                         bcrypt.hash(password, 10, function(err, bcryptedPassword){
                             const newUser = models.User.create({
                                 firstname: firstname,
