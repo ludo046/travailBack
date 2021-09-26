@@ -25,7 +25,7 @@ module.exports = {
                 const age = req.body.age;
                 const email = req.body.email;
                 const password = req.body.password;
-                const code = Math.floor(100000 + Math.random() * 900000);
+                let code = Math.floor(000000 + Math.random() * 900000);
                 console.log(code);
 
                 if(firstname == null || lastname == null || age == null || email == null ||password == null) {
@@ -48,9 +48,9 @@ module.exports = {
                                 lastname: lastname,
                                 age: age,
                                 email: email,
-                                code: code,
                                 password: bcryptedPassword,
-                                isAdmin: 0
+                                isAdmin: 0,
+                                code: code
                             })
                             .then(function(newUser){
                                 // return res.status(201).json({
