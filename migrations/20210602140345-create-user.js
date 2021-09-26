@@ -38,6 +38,7 @@ module.exports = {
       },
       code: {
         allowNull: false,
+        defaultValue: 'false',
         type: Sequelize.STRING
       },
       activate: {
