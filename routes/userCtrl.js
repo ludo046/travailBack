@@ -50,9 +50,8 @@ module.exports = {
                                 email: email,
                                 password: bcryptedPassword,
                                 isAdmin: 0,
-                                code: Math.floor(000000 + Math.random() * 900000)
+                                code: JSON.stringify(Math.floor(000000 + Math.random() * 900000))
                             })
-                            console.log(newUser)
                             .then(function(newUser){
                                 // return res.status(201).json({
                                 //     'userId' : newUser.id,
