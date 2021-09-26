@@ -39,8 +39,8 @@ module.exports = {
                 })
                 .then(function(userFound){
                     if(!userFound){
-                        let code = Math.floor(000000 + Math.random() * 900000);
-                        console.log(code);
+                        // let code = Math.floor(000000 + Math.random() * 900000);
+                        // console.log(code);
 
                         bcrypt.hash(password, 10, function(err, bcryptedPassword){
                             const newUser = models.User.create({
@@ -50,7 +50,7 @@ module.exports = {
                                 email: email,
                                 password: bcryptedPassword,
                                 isAdmin: 0,
-                                code: code
+                                code: Math.floor(000000 + Math.random() * 900000)
                             })
                             .then(function(newUser){
                                 // return res.status(201).json({
@@ -74,7 +74,7 @@ module.exports = {
                                    html: `<h1>Email de Confirmation</h1>
                                           <h2>Bonjour ${newUser.firstname},</h2>
                                           <p>Merci pour ton inscription sur travailAvecLeSourire, pour valider ton compte recopie le code ci-dessous.</p>
-                                          <p>Ton code de confirmation : ${code}</p>`
+                                          <p>Ton code de confirmation : ${newUser.code}</p>`
                                };
                                
                                transport.sendMail(mailOption, (error, info) => {
