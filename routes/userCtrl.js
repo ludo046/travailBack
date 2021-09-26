@@ -89,7 +89,7 @@ module.exports = {
 
                             })
                             .catch(function(error){
-                                return res.status(500).json({error})
+                                return res.status(500).json({message : error.message})
                             })
                         })
                     } else {
@@ -97,19 +97,18 @@ module.exports = {
                     }
                 })
                 .catch(function(error){
-                    return res.status(500).json({error})
+                    return res.status(500).json({message : error.message})
                 })
             } else {
                 throw error(invalid)
             }
         }catch (error){
-            res.status(400).json({error})
+            res.status(400).json({message : error.message})
         }
     },
 
     verificationUser: function(req,res){
-        let code = req.body.code;
-        console.log(req.body);
+        const code = req.body.code;
 
         models.User.findOne({
             where: {code: code}
