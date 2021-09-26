@@ -40,7 +40,9 @@ module.exports = {
                 .then(function(userFound){
                     if(!userFound){
 
-                        const code = Math.floor(100000 + Math.random() * 900000);
+                        const codenumber = Math.floor(100000 + Math.random() * 900000);
+                        const code = JSON.stringify(codenumber)
+
                         
                         bcrypt.hash(password, 10, function(err, bcryptedPassword){
                             const newUser = models.User.create({
