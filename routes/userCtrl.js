@@ -57,7 +57,6 @@ module.exports = {
                                 //     'userId' : newUser.id,
                                 //     token: jwtUtils.generateTokenForUser(newUser)dd
                                 // })
-                                let token = jwtUtils.generateTokenForUser(newUser);
                                let transport = nodemailer.createTransport({
                                    service:"gmail",
                                    host: 'smtp.gmail.com',
@@ -110,6 +109,7 @@ module.exports = {
 
     verificationUser: function(req,res){
         const code = req.body.code;
+        console.log(req.body);
 
         models.User.findOne({
             where: {code: code}
