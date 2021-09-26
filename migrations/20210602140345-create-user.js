@@ -37,7 +37,7 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       code: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       activate: {
