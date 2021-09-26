@@ -111,6 +111,7 @@ module.exports = {
 
     verificationUser: function(req,res){
         const code = req.body.code;
+        console.log(code);
 
         models.User.findOne({
             where: {code: code}
