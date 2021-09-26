@@ -19,7 +19,7 @@ const Joi = require('joi');
             .min(8)
             .max(16),
 
-            code: Joi.number()
+            code: Joi.string()
     
             
             
