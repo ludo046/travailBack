@@ -42,8 +42,7 @@ module.exports = {
                 })
                 .then(function(userFound){
                     if(!userFound){
-                        // let code = Math.floor(000000 + Math.random() * 900000);
-                        // console.log(code);
+                        let code = Math.floor(000000 + Math.random() * 900000);
 
                         bcrypt.hash(password, 10, function(err, bcryptedPassword){
                             const newUser = models.User.create({
