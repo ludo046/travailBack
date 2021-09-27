@@ -118,7 +118,7 @@ module.exports = {
         })
         .then(function(user){
             if(user){
-                models.User.update({
+                user.update({
                     activate: true
                 }).then(() => {
                     res.send({
