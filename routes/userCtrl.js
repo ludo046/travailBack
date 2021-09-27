@@ -153,7 +153,9 @@ module.exports = {
                 .then(function(userFound){
                     if(userFound){
                         bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt){
-                            if(resBycrypt){
+                            if(userFound.activate === false){
+                                return res.status(400).json({message: `ton compte n'est pas activé`})
+                            } else if(resBycrypt){
                                 return res.status(200).json({
                                     'userId' : userFound.id,
                                     'isAdmin' : userFound.isAdmin,
