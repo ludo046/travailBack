@@ -124,7 +124,8 @@ module.exports = {
                     res.send({
                         'userId': user.id,
                         'isAdmin': user.isAdmin,
-                        'token': jwtUtils.generateTokenForUser(user)
+                        'token': jwtUtils.generateTokenForUser(user),
+                        'activate': user.activate
                     })
                 })
                 .catch(function(error){
