@@ -114,7 +114,7 @@ module.exports = {
         console.log(req.body);
 
         models.User.findOne({
-            where: {code: code}
+            where: {code: code.code}
         })
         .then(function(user){
             if(user){
