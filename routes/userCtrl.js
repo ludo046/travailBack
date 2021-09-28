@@ -7,9 +7,6 @@ const registerSchema = require('../utils/joi/registerSchema');
 const loginSchema = require('../utils/joi/loginSchema');
 const updateUserSchema = require('../utils/joi/updateProfile');
 const nodemailer = require('nodemailer');
-const SMTPTransport = require('nodemailer/lib/smtp-transport');
-const { message } = require('../utils/joi/registerSchema');
-const { generateTokenForUser } = require('../utils/jwt.utils');
 require("dotenv").config();
 
 
@@ -30,7 +27,7 @@ module.exports = {
 
 
                 if(firstname == null || lastname == null || age == null || email == null ||password == null) {
-                    return res.status(400).json({ 'error' : 'tous les champs de sont pas remplis' });
+                    return res.status(400).send({ 'error' : 'tous les champs de sont pas remplis' });
                 }
                 if(age < 18){
                     return res.status(400).json({ 'error' : `Vous n'avez pas l'âge requis` });
