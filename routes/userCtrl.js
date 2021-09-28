@@ -27,7 +27,7 @@ module.exports = {
 
 
                 if(firstname == null || lastname == null || age == null || email == null ||password == null) {
-                    return res.status(400).send({ 'error' : 'tous les champs de sont pas remplis' });
+                    return res.status(400).json({ 'error' : 'tous les champs de sont pas remplis' });
                 }
                 if(age < 18){
                     return res.status(400).json({ 'error' : `Vous n'avez pas l'âge requis` });
