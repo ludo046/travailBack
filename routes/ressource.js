@@ -148,7 +148,7 @@ module.exports = {
       order: [order != null ? order.split(":") : ["id", "DESC"]], 
       attributes: fields !== "*" && fields != null ? fields.split(",") : null,
       where:{
-        parcours: 'developpeur-frontend'
+        parcours: 'developpeur-front'
       },
       include: [
         {
@@ -258,7 +258,7 @@ module.exports = {
       where:{
         userId: userId,
         id: ressourceId,
-        parcours: 'developpeur-frontend'
+        parcours: 'developpeur-front'
       }
     })
     .then(function(ressource){
