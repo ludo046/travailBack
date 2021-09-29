@@ -83,7 +83,7 @@ module.exports = {
                                         console.log('message send :', info.messageId);
                                         console.log('preview url : ', nodemailer.getTestMessageUrl(info));
                                    }
-
+                                   res.send({message: 'ok'})
                                })
 
                             })
