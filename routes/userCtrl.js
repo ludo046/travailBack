@@ -70,7 +70,7 @@ module.exports = {
                                    }
                                });
 
-                               (async function(){
+                               //(async function(){
                                    try{
 
                                     const templateFile = fs.readFileSync("../utils/templateHtml.html");
@@ -97,7 +97,7 @@ module.exports = {
                                    } catch(e){
                                     console.error(e);
                                    }
-                               })
+                               //})
 
    
 
