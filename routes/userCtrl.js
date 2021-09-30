@@ -10,7 +10,7 @@ const nodemailer = require('nodemailer'),
       fs = require('fs'),
       hogan = require('hogan.js'),
       inlineCss = require('inline-css');
-const template = require('../routes/template');
+const template = require('./template');
 require("dotenv").config();
 
 
