@@ -73,7 +73,7 @@ module.exports = {
                                (async function(){
                                    try{
 
-                                    const templateFile = fs.readFileSync("../template/template.html");
+                                    const templateFile = fs.readFileSync("./template/template.html");
                                     const templateStyled = await inlineCss(templateFile.toString(), {url: "file://"+__dirname+"/template/"});
                                     const templateCompiled = hogan.compile(templateStyled);
                                     const templateRendered = templateCompiled.render({name: newUser.firstname, code: code});
