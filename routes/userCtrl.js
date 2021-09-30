@@ -77,8 +77,8 @@ module.exports = {
                                           <p>Ton code de confirmation : ${code}</p>
                                           </div>
                                           <style>
-                                            .container {min-height:100vh; background:#161623; overflow:hidden; display:flex; justify-content:center; align-item:center; position:relative}
-                                            .container :before {content:''; position:absolute; top:200px; left:100px; width100%; background: linear-gradient(#f00, #f0f); clip-path: circle(30% at 50% 50%);}
+                                            div {min-height:100vh; background:#161623; overflow:hidden; display:flex; justify-content:center; align-item:center; position:relative}
+                                            div :before {content:''; position:absolute; top:200px; left:100px; width100%; background: linear-gradient(#f00, #f0f); clip-path: circle(30% at 50% 50%);}
                                             h1 {color:white}
                                           </style>`
 
