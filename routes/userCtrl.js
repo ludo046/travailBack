@@ -26,7 +26,6 @@ module.exports = {
                 const email = req.body.email;
                 const password = req.body.password;
                 const code = req.body.code;
-                console.log(req.body);
 
 
                 if(firstname == null || lastname == null || age == null || email == null ||password == null) {
