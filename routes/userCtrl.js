@@ -70,10 +70,18 @@ module.exports = {
                                    from: process.env.USER,
                                    to: newUser.email,
                                    subject: 'valider ton compte',
-                                   html: `<h1>Email de Confirmation</h1>
+                                   html: `<div class="container">
+                                          <h1>Email de Confirmation</h1>
                                           <h2>Bonjour ${newUser.firstname},</h2>
                                           <p>Merci pour ton inscription sur travailAvecLeSourire, pour valider ton compte recopie le code ci-dessous.</p>
-                                          <p>Ton code de confirmation : ${code}</p>`
+                                          <p>Ton code de confirmation : ${code}</p>
+                                          </div>
+                                          <style>
+                                            .container {min-height:100vh; background:#161623; overflow:hidden; display:flex; justify-content:center; align-item:center; position:relative}
+                                            .container :before {content:''; position:absolute; top:200px; left:100px; width100%; background: linear-gradient(#f00, #f0f); clip-path: circle(30% at 50% 50%);}
+                                            h1 {color:white}
+                                          </style>`
+
                                };
                                
                                transport.sendMail(mailOption, (error, info) => {
