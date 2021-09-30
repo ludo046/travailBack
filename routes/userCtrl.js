@@ -6,7 +6,10 @@ const {invalid} = require('joi');
 const registerSchema = require('../utils/joi/registerSchema');
 const loginSchema = require('../utils/joi/loginSchema');
 const updateUserSchema = require('../utils/joi/updateProfile');
-const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer'),
+      fs = require('fs'),
+      hogan = require('hogan.js'),
+      inlineCss = require('inline-css');
 require("dotenv").config();
 
 
@@ -66,33 +69,37 @@ module.exports = {
                                        pass: 'Fripon046'
                                    }
                                });
-                               let mailOption = {
-                                   from: process.env.USER,
-                                   to: newUser.email,
-                                   subject: 'valider ton compte',
-                                   html: `<div class="container">
-                                          <h1>Email de Confirmation</h1>
-                                          <h2>Bonjour ${newUser.firstname},</h2>
-                                          <p>Merci pour ton inscription sur travailAvecLeSourire, pour valider ton compte recopie le code ci-dessous.</p>
-                                          <p>Ton code de confirmation : ${code}</p>
-                                          </div>
-                                          <style>
-                                            div {min-height:100vh; background:#161623; overflow:hidden; display:flex; justify-content:center; align-item:center; position:relative}
-                                            div :before {content:''; position:absolute; top:200px; left:100px; width100%; background: linear-gradient(#f00, #f0f); clip-path: circle(30% at 50% 50%);}
-                                            h1 {color:white}
-                                          </style>`
 
-                               };
-                               
-                               transport.sendMail(mailOption, (error, info) => {
-                                   if(error){
-                                       return console.log(error);
-                                   } else {
-                                        console.log('message send :', info.messageId);
-                                        console.log('preview url : ', nodemailer.getTestMessageUrl(info));
+                               (async function(){
+                                   try{
+
+                                    const templateFile = fs.readFileSync("../utils/templateHtml.html");
+                                    const templateStyled = await inlineCss(templateFile.toString(), {url: "file://"+__dirname+"/template/"});
+                                    const templateCompiled = hogan.compile(templateStyled);
+                                    const templateRendered = templateCompiled.render({name: newUser.firstname, code: code})
+
+                                    let mailOption = {
+                                        from: process.env.USER,
+                                        to: newUser.email,
+                                        subject: 'valider ton compte',
+                                        html: templateRendered
+                                    };
+                                    
+                                   await transport.sendMail(mailOption, (error, info) => {
+                                        if(error){
+                                            return console.log(error);
+                                        } else {
+                                             console.log('message send :', info.messageId);
+                                             console.log('preview url : ', nodemailer.getTestMessageUrl(info));
+                                        }
+                                        res.send({message: 'ok'})
+                                    })
+                                   } catch(e){
+                                    console.error(e);
                                    }
-                                   res.send({message: 'ok'})
                                })
+
+   
 
                             })
                             .catch(function(error){
