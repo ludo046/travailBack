@@ -17,15 +17,12 @@ $font : "montserrat", serif, sans-serif; */
     }
   }
 .container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
     background: #161623;
     position: relative;
     overflow: hidden;
 }
-.container::before{
+.round1{
     content: '';
     position: absolute;
     top: 200px;
@@ -36,7 +33,7 @@ $font : "montserrat", serif, sans-serif; */
     clip-path: circle(30% at 50% 50%);
     animation: rotate 5s infinite ;
 }
-.container::after{
+.round2{
     content: '';
     position: absolute;
     top: -200px;
@@ -48,6 +45,9 @@ $font : "montserrat", serif, sans-serif; */
     animation: rotate 5s 1s infinite ;
 }
 .text{
+    transform: translateY(60%);
+    width: 80%;
+    margin: 0 auto;
     z-index: 1;
     text-align: center;
     padding: 30px;
