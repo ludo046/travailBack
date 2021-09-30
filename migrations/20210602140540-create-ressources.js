@@ -32,6 +32,10 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING
       },
+      pdf: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
       project:{
         allowNull: false,
         type: Sequelize.STRING

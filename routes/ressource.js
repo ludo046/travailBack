@@ -21,11 +21,14 @@ module.exports = {
         let project = null;
         let attachment = null;
         let movie = null;
+        let pdf = null;
 
         if (req.file) {
           let media = req.file.filename;
           if (media.includes("mp4")) {
             movie = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+          }else if(media.includes('.pdf')){
+            pdf = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
           } else {
             attachment = String(`${req.protocol}://${req.get("host")}/images/${req.file.filename}`);
           }
@@ -82,6 +85,7 @@ module.exports = {
                   project: project,
                   image: attachment,
                   movie: movie,
+                  pdf: pdf,
                   parcours: parcour,
                   isAdmin: false
                 }).then(function (newRessource) {
