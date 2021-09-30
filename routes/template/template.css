@@ -31,7 +31,6 @@ $font : "montserrat", serif, sans-serif; */
     height: 100%;
     background: linear-gradient(#f00, #f0f);
     clip-path: circle(30% at 50% 50%);
-    animation: rotate 5s infinite ;
 }
 .round2{
     content: '';
@@ -42,7 +41,6 @@ $font : "montserrat", serif, sans-serif; */
     height: 100%;
     background: linear-gradient(#2196f3, #e91e63);
     clip-path: circle(20% at 50% 50%);
-    animation: rotate 5s 1s infinite ;
 }
 table{
     transform: translateY(60%);
@@ -67,6 +65,6 @@ table{
     position: relative;
 
 }
-h1{
-    margin-bottom: 20px;
+td{
+    text-align: center;
 }
