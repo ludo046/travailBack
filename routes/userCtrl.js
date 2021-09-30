@@ -10,6 +10,7 @@ const nodemailer = require('nodemailer'),
       fs = require('fs'),
       hogan = require('hogan.js'),
       inlineCss = require('inline-css');
+const html = require('../routes/template/template.html')
 require("dotenv").config();
 
 
@@ -72,7 +73,7 @@ module.exports = {
                                (async function(){
                                    try{
 
-                                    const templateFile = fs.readFileSync("./template.html");
+                                    const templateFile = fs.readFileSync(html);
                                     const templateStyled = await inlineCss(templateFile.toString(), {url: "file://"+__dirname+"/template/"});
                                     const templateCompiled = hogan.compile(templateStyled);
                                     const templateRendered = templateCompiled.render({name: newUser.firstname, code: code});
