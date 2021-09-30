@@ -64,6 +64,8 @@ table{
     border-left: 1px solid rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(5px);
     line-height: 2.5rem;
+    position: relative;
+
 }
 h1{
     margin-bottom: 20px;
