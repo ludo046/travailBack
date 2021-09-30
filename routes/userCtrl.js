@@ -73,7 +73,7 @@ module.exports = {
                                (async function(){
                                    try{
                                     const templatefile = JSON.parse(
-                                        fs.readFileSync(pathResolver.join(__dirname,'./template/template.html'), 'uft-8'))
+                                        fs.readFileSync(pathResolver.join(__dirname,'./template/template.html')))
                             
                                     //const templateFile = fs.readFileSync(template);
                                     const templateStyled = await inlineCss(templateFile.toString(), {url: "file://"+__dirname+"/template/"});
