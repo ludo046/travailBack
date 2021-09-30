@@ -43,7 +43,6 @@ $font : "montserrat", serif, sans-serif; */
     clip-path: circle(20% at 50% 50%);
 }
 table{
-    transform: translateY(60%);
     width: 80%;
     margin: 0 auto;
     z-index: 1;
