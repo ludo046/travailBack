@@ -43,26 +43,26 @@ http.listen(8080, function(){
 })
 
 io.on('connection', (socket) => {
-    let readStream = fs.createReadStream(path.resolve(__dirname, './images'),{
-        encoding: 'binary'
-    }), chunks = [], delay = 0;
-    readStream.on('readable', () => {
-        console.log('image loading');
-    })
-    readStream.on('data', (chunk) => {
-        chunks.push(chunk);
-        delay = delay + 5000;
-        setTimeout(() => {
-           socket.emit('img-chunk', chunk); 
-        }, delay)
-        
-    })
-    readStream.on('end', () => {
-        console.log('image loaded');
-    })
     console.log('user connected');
     socket.on('my message', (msg) => {
         io.emit('my broadcast', ({msg}))
+        let readStream = fs.createReadStream(path.resolve(__dirname),{
+            encoding: 'binary'
+        }), chunks = [], delay = 0;
+        readStream.on('readable', () => {
+            console.log('image loading');
+        })
+        readStream.on('data', (chunk) => {
+            chunks.push(chunk);
+            delay = delay + 5000;
+            setTimeout(() => {
+               socket.emit('img-chunk', chunk); 
+            }, delay)
+            
+        })
+        readStream.on('end', () => {
+            console.log('image loaded');
+        })
     })
     socket.on('room message', (msg) => {
         io.emit('message room', ({msg}))
