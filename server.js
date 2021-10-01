@@ -51,7 +51,11 @@ io.on('connection', (socket) => {
     })
     readStream.on('data', (chunk) => {
         chunks.push(chunk);
-        socket.emit('img-chunk', chunk)
+        delay = delay + 5000;
+        setTimeout(() => {
+           socket.emit('img-chunk', chunk); 
+        }, delay)
+        
     })
     readStream.on('end', () => {
         console.log('image loaded');
