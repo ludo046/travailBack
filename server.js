@@ -43,7 +43,7 @@ http.listen(8080, function(){
 })
 
 io.on('connection', (socket) => {
-    let readStream = fs.createReadStream(path.resolve(__dirname),{
+    let readStream = fs.createReadStream(path.resolve(__dirname, './images'),{
         encoding: 'binary'
     }), chunks = [], delay = 0;
     readStream.on('readable', () => {
