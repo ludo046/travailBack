@@ -43,6 +43,19 @@ http.listen(8080, function(){
 })
 
 io.on('connection', (socket) => {
+    let readStream = fs.createReadStream(path.resolve(__dirname),{
+        encoding: 'binary'
+    }), chunks = [], delay = 0;
+    readStream.on('readable', () => {
+        console.log('image loading');
+    })
+    readStream.on('data', (chunk) => {
+        chunks.push(chunk);
+        socket.emit('img-chunk', chunk)
+    })
+    readStream.on('end', () => {
+        console.log('image loaded');
+    })
     console.log('user connected');
     socket.on('my message', (msg) => {
         io.emit('my broadcast', ({msg}))
@@ -59,8 +72,5 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('user diconnected');
     })
-    // socket.on('my message',(msg) => {
-    //     console.log('message: ' + msg);
-    // })
 })
 
