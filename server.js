@@ -44,7 +44,7 @@ http.listen(8080, function(){
 
 io.on('connection', (socket) => {
     console.log('user connected');
-    socket.on('my message', (msg) => {
+    socket.on('my message','base64 file', (msg) => {
         io.emit('my broadcast', ({msg}))
     })
     socket.on('room message', (msg) => {
