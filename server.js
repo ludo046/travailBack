@@ -43,35 +43,26 @@ http.listen(8080, function(){
 })
 
 io.on('connection', (socket) => {
+    socket.on('base64 file', function (msg) {
+        console.log('received base64 file from' + msg.username);
+        socket.username = msg.username;
+        // socket.broadcast.emit('base64 image', //exclude sender
+        io.sockets.emit('base64 file',  //include sender
+    
+            {
+              username: socket.username,
+              file: msg.file,
+              fileName: msg.fileName
+            }
+    
+        );
+    });
     console.log('user connected');
     socket.on('my message', (msg) => {
         io.emit('my broadcast', ({msg}))
-        let readStream = fs.createReadStream(path.resolve(__dirname),{
-            encoding: 'binary'
-        }), chunks = [], delay = 0;
-        readStream.on('readable', () => {
-            console.log('image loading');
-        })
-        readStream.on('data', (chunk) => {
-            chunks.push(chunk);
-            delay = delay + 5000;
-            setTimeout(() => {
-               socket.emit('img-chunk', chunk); 
-            }, delay)
-            
-        })
-        readStream.on('end', () => {
-            console.log('image loaded');
-        })
     })
     socket.on('room message', (msg) => {
         io.emit('message room', ({msg}))
-    })
-    socket.on('image', (image, buffer) => {
-        fs.readFile(__dirname + '/images/image.jpg', (err, buf) => {
-            socket.emit('image', {image: true, buffer: buf});
-            console.log('image file is initialized');
-        })
     })
     socket.on('disconnect', () => {
         console.log('user diconnected');
