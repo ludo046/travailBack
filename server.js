@@ -3,10 +3,10 @@ const express = require('express');
 const apiRouter = require('./apiRouter').router;
 const path = require('path');
 const helmet = require('helmet')
-const fs = require('fs')
+const fs = require('fs');
 require('dotenv').config();
 const db = require("./models");
-//db.sequelize.sync();
+db.sequelize.sync();
 //db.sequelize.sync({force: true});
 require('dotenv').config();
 
