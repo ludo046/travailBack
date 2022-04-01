@@ -12,10 +12,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.User.hasMany(models.Ressource, {
-        foreignKey: "userId"
+        foreignKey: "userId",
+        onDelete: "SET NULL"
       });
       models.User.hasMany(models.Chat, {
-        foreignKey:"userId"
+        foreignKey:"userId",
+        onDelete: "SET NULL"
       });
     }
   };
@@ -28,7 +30,9 @@ module.exports = (sequelize, DataTypes) => {
     picture: DataTypes.STRING,
     isAdmin: DataTypes.BOOLEAN,
     code: DataTypes.STRING,
-    activate: DataTypes.BOOLEAN
+    activate: DataTypes.BOOLEAN,
+    passwordToken: DataTypes.STRING,
+    online : DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'User',

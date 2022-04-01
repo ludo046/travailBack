@@ -45,6 +45,15 @@ module.exports = {
         defaultValue: false,
         type: Sequelize.BOOLEAN
       },
+      passwordToken:{
+        allowNull:true,
+        type: Sequelize.STRING
+      },
+      online:{
+        allowNull:false,
+        type : Sequelize.BOOLEAN,
+        defaultValue: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

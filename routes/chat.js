@@ -19,14 +19,19 @@ module.exports = {
               let message = null;
               let attachment = null;
               let movie = null;
+
+              let files = req.files;
+
       
-              if (req.file) {
-                let media = req.file.filename;
-                if (media.includes("mp4")) {
-                  movie = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-                } else {
-                  attachment = String(`${req.protocol}://${req.get("host")}/images/${req.file.filename}`);
-                }
+              if (files) {
+                for(let i = 0; i < files.length; i++){
+                  let media = req.files[i].filename;
+                  if (media.includes(".mp4")) {
+                    movie = `${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`;
+                  } else {
+                    attachment = `${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`;
+                  }
+                 } 
               }
       
               if (req.body.message) {
@@ -126,15 +131,21 @@ module.exports = {
             let message = null;
             let attachment = null;
             let movie = null;
-    
-            if (req.file) {
-              let media = req.file.filename;
-              if (media.includes("mp4")) {
-                movie = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-              } else {
-                attachment = String(`${req.protocol}://${req.get("host")}/images/${req.file.filename}`);
-              }
+
+            let files = req.files;
+
+      
+            if (files) {
+              for(let i = 0; i < files.length; i++){
+                let media = req.files[i].filename;
+                if (media.includes(".mp4")) {
+                  movie = `${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`;
+                } else {
+                  attachment = `${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`;
+                }
+               } 
             }
+    
     
             if (req.body.message) {
               message = String(req.body.message);

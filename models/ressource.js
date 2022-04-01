@@ -13,9 +13,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       models.Ressource.belongsTo(models.User, {
         foreignKey:{
-          allowNull: false
+          allowNull: false,
+          onDelete: "SET NULL"
         }
-      })
+      });
+      models.Ressource.hasMany(models.File, {
+        foreignKey:"RessourceId",
+        onDelete: "SET NULL"
+      });
     }
     
   };

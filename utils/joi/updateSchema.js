@@ -1,9 +1,12 @@
 const Joi = require('joi');
 
-const sendPostSchema = Joi.object({
+const updatePostSchema = Joi.object({
             title: Joi.string()
             .max(100),
-             
+
+            project : Joi.string()
+            .allow(null,''),
+
             content: Joi.string()
             .allow(null,'')
             .max(1200),
@@ -13,4 +16,4 @@ const sendPostSchema = Joi.object({
             movie: Joi.any(),
 
 })
-    module.exports = sendPostSchema;
+    module.exports = updatePostSchema;

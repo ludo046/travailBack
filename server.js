@@ -9,6 +9,7 @@ const db = require("./models");
 //db.sequelize.sync();
 //db.sequelize.sync({force: true});
 require('dotenv').config();
+const users = {};
 
 
 //instantiate server
@@ -44,6 +45,10 @@ http.listen(8080, function(){
 
 io.on('connection', (socket) => {
     console.log('user connected');
+    socket.on('login', (user) => {
+        console.log('a user ' + user.userId + ' connected');
+        io.emit('login', users[socket.id] = user.userId);
+    })
     socket.on('my message', (msg) => {
         io.emit('my broadcast', ({msg}))
     })
@@ -51,7 +56,9 @@ io.on('connection', (socket) => {
         io.emit('message room', ({msg}))
     })
     socket.on('disconnect', () => {
-        console.log('user diconnected');
+        console.log('user '+ users[socket.id] +' disconnected');
+        delete users[socket.id]
     })
+
 })
 

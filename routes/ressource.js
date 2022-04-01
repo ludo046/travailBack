@@ -4,7 +4,7 @@ const jwtUtils = require("../utils/jwt.utils");
 const fs = require("fs");
 const { invalid, func } = require("joi");
 const postRessourceSchema = require("../utils/joi/postRessourceSchema");
-const updateRessourceSchema = require('../utils/joi/updateSchema')
+const updateRessourceSchema = require('../utils/joi/updateSchema');
 
 const CONTENT_LIMIT = 5000;
 
@@ -19,19 +19,22 @@ module.exports = {
         let title = null
         let content = null;
         let project = null;
-        let attachment = null;
-        let movie = null;
-        let pdf = null;
+        let attachment = [];
+        let movie = [];
+        let pdf = [];
+        let files = req.files;
 
-        if (req.file) {
-          let media = req.file.filename;
-          if (media.includes("mp4")) {
-            movie = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-          }else if(media.includes('.pdf')){
-            pdf = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-          } else {
-            attachment = String(`${req.protocol}://${req.get("host")}/images/${req.file.filename}`);
-          }
+        if (files) {
+          for(let i = 0; i < files.length; i++){
+            let media = req.files[i].filename;
+            if (media.includes(".mp4")) {
+              movie.push( `${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`) ;
+            }else if(media.includes('pdf')){
+              pdf.push(`${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`)  ;
+            } else {
+              attachment.push(`${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`);
+            }
+           } 
         }
 
         if(req.body.title){
@@ -83,13 +86,10 @@ module.exports = {
                   title: title,
                   content: content,
                   project: project,
-                  image: attachment,
-                  movie: movie,
-                  pdf: pdf,
                   parcours: parcour,
                   isAdmin: false
                 }).then(function (newRessource) {
-                  done(newRessource);
+                  done(null, userFound, newRessource);
                 }).catch(function(err){
                   return res.status(404).json({message: err.message });
                 })
@@ -97,10 +97,46 @@ module.exports = {
                 res.status(404).json({ error: "user not found" });
               }
             },
+            function(userFound, newRessource, done){
+              if(newRessource){
+          
+                for(let i = 0; i < attachment.length; i++){
+                  models.File.create({
+                    RessourceId : newRessource.id,
+                    image: attachment[i]
+                  })
+                  .then(function (newFile) {
+                    done(userFound,newRessource ,newFile);
+                  }).catch(function(err){
+                    return res.status(404).json({message: err.message });
+                  })
+                }
+                for(let i = 0; i < movie.length; i++){
+                  models.File.create({
+                    RessourceId : newRessource.id,
+                    movie: movie[i]
+                  })
+                }
+                for(let i = 0; i < pdf.length; i++){
+                  models.File.create({
+                    RessourceId : newRessource.id,
+                    pdf: pdf[i]
+                  })
+                  .then(function (newRessource) {
+                    done(null, userFound, newRessource);
+                  }).catch(function(err){
+                    return res.status(404).json({message: err.message });
+                  })
+                }
+                
+              }else {
+                res.status(404).json({ error: "post not found" });
+              }
+            }
           ],
           function (newRessource) {
             if (newRessource) {
-              return res.status(201).json(newRessource);
+              return res.status(201).json({newRessource});
             } else {
               return res.status(500).json({ error: "cannot post message" });
             }
@@ -122,18 +158,22 @@ module.exports = {
       order: [order != null ? order.split(":") : ["id", "DESC"]], 
       attributes: fields !== "*" && fields != null ? fields.split(",") : null,
       where:{
-        parcours: 'developpeur-web'
+        parcours: 'dev-web'
       },
       include: [
         {
           model: models.User,
           attributes: ["firstname", "lastname"],
-          //as: "user_ressource"
         },
+        {
+          model: models.File,
+          attributes: ["image", "movie", "pdf"]
+        }
       ],
     })
       .then(function (ressource) {
         if (ressource) {
+          console.log(ressource);
           res.status(200).json(ressource);
         } else {
           res.status(404).json({ error: "aucune ressources trouvée" });
@@ -152,14 +192,17 @@ module.exports = {
       order: [order != null ? order.split(":") : ["id", "DESC"]], 
       attributes: fields !== "*" && fields != null ? fields.split(",") : null,
       where:{
-        parcours: 'developpeur-front'
+        parcours: 'dev-front'
       },
       include: [
         {
           model: models.User,
           attributes: ["firstname", "lastname"],
-          //as: "user_ressource"
         },
+        {
+          model: models.File,
+          attributes: ["image", "movie", "pdf"]
+        }
       ],
     })
       .then(function (ressource) {
@@ -174,7 +217,7 @@ module.exports = {
       });
   },
 
-  deleteRessourceDevWeb: function(req,res){
+  deleteRessource: function(req,res){
     let headerAuth = req.headers["authorization"];
     let userId = jwtUtils.getUserId(headerAuth);
     let ressourceId = parseInt(req.params.ressourceId)
@@ -190,7 +233,6 @@ module.exports = {
       where:{
         userId: userId,
         id: ressourceId,
-        parcours: 'developpeur-web'
       }
     })
     .then(function(ressource){
@@ -246,151 +288,87 @@ module.exports = {
     })
   },
 
-  deleteRessourceDevFront: function(req,res){
-    let headerAuth = req.headers["authorization"];
-    let userId = jwtUtils.getUserId(headerAuth);
-    let ressourceId = parseInt(req.params.ressourceId)
 
-    if(userId <= 0){
-      return res.status(400).json({error: "utilisateur non reconnu"})
-    }
-    if(ressourceId <= 0){
-      return res.status(400).json({error: "ressource non reconnu"})
-    }
 
-    models.Ressource.findOne({
-      where:{
-        userId: userId,
-        id: ressourceId,
-        parcours: 'developpeur-front'
-      }
-    })
-    .then(function(ressource){
-      if(ressource.image){
-        const filename = ressource.image.split("/images/")[1];
-        fs.unlink(`images/${filename}`,() =>{
-          models.Ressource.destroy({
-            where:{
-              userId: userId,
-              id: ressourceId
-            }
-          })
-          .then(function(){
-            res.status(201).json(({ok: "ressource supprimée"}))
-          })
-          .catch(function (err){
-            res.status(400).json({ err });
-          })
-        });
-      } else if(ressource.movie){
-        const filename = ressource.movie.split("/images/")[1];
-        fs.unlink(`images/${filename}`,() =>{
-          models.Ressource.destroy({
-            where:{
-              userId: userId,
-              id: ressourceId
-            }
-          })
-          .then(function(){
-            res.status(201).json(({ok: "ressource supprimée"}))
-          })
-          .catch(function (err){
-            res.status(400).json({ err });
-          })
-        });
-      } else {
-        models.Ressource.destroy({
-          where:{
-            userId: userId,
-            id: ressourceId
-          }
-        })
-        .then(function(){
-          res.status(201).json(({ok: "ressource supprimée"}))
-        })
-        .catch(function (err){
-          res.status(400).json({ err });
-        })
-      }
-    })
-    .catch(function(err){
-      res.status(400).json({ err });
-    })
-  },
+  // modifyRessource: async function(req, res){
+  //   try{
+  //     const valid = await updateRessourceSchema.validateAsync(req.body);
+  //     if(valid){
+  //       let headerAuth = req.headers["authorization"];
+  //       let userId = jwtUtils.getUserId(headerAuth);
+  //       const ressourceId = req.params.ressourceId;
 
-  modifyRessource: async function(req, res){
-    try{
-      const valid = await updateRessourceSchema.validateAsync(req.body);
-      if(valid){
-        let headerAuth = req.headers["authorization"];
-        let userId = jwtUtils.getUserId(headerAuth);
-        const ressourceId = req.params.ressourceId;
+  //       let title = null
+  //       let content = [null];
+  //       let attachment = [];
+  //       let pdf = [];
+  //       let movie = [];
+  //       let files = req.files;
 
-        let title = null
-        let content = null;
-        let attachment = null;
-        let movie = null;
+  //       if(userId <= 0){
+  //         return res.status(400).json({error : `nous n'êtes pas identifié`})
+  //       }
 
-        if(userId <= 0){
-          return res.status(400).json({error : `nous n'êtes pas identifié`})
-        }
+  //       if (files) {
+  //         for(let i = 0; i < files.length; i++){
+  //           let media = req.files[i].filename;
+  //           if (media.includes(".mp4")) {
+  //             movie.push( `${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`) ;
+  //           }else if(media.includes('pdf')){
+  //             pdf.push(`${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`)  ;
+  //           } else {
+  //             attachment.push(`${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`);
+  //           }
+  //          } 
+  //       }
+  //       if(req.body.title){
+  //         title = req.body.title
+  //       }
+  //       if(req.body.content){
+  //         content = req.body.content
+  //       }
 
-        if (req.file) {
-          let media = req.file.filename;
-          if (media.includes("mp4")) {
-            movie = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-          } else {
-            attachment = String(`${req.protocol}://${req.get("host")}/images/${req.file.filename}`);
-          }
-        }
-        if(req.body.title){
-          title = req.body.title
-        }
-        if(req.body.content){
-          content = req.body.content
-        }
+  //       models.Ressource.findOne({
+  //         where:{
+  //           id: ressourceId
+  //         }
+  //       })
+  //       .then(function(modifyRessource){
+  //         let filename = null;
+  //         if(modifyRessource.attachment && content){
+  //              filename = modifyRessource.picture.split("/images/")[1];
+  //         }
 
-        models.Ressource.findOne({
-          where:{
-            id: ressourceId
-          }
-        })
-        .then(function(modifyRessource){
-          let filename = null;
-          if(modifyRessource.attachment && content){
-               filename = modifyRessource.picture.split("/images/")[1];
-          }
-
-          if(modifyRessource.movie && content){
-              filename = modifyRessource.movie.split("/images/")[1];
-            }
-            fs.unlink(`app/images/${filename}`, (err) => {
-                if (err) {
-                  return console.log(err);
-                } else {
-                  console.log("image supprimée !");
-                }
-              });
-              return modifyRessource.update({
-                title: title ? title : modifyRessource.title,
-                content: content ? content : modifyRessource.content,
-                image: attachment ? attachment : modifyRessource.attachment,
-                movie: movie ? movie : modifyRessource.movie,  
-              });
-        })
-        .then(function(ressource){
-          return res.status(201).json(ressource)
-        })
-        .catch(function(err){
-          res.status(500).json({err});
-        })
-      } else {
-        throw error(invalid)
-      }
-    }catch(error){
-      res.status(400).json({message: error.message})
-    }
-  },
+  //         if(modifyRessource.movie && content){
+  //             filename = modifyRessource.movie.split("/images/")[1];
+  //           }
+  //           fs.unlink(`app/images/${filename}`, (err) => {
+  //               if (err) {
+  //                 return console.log(err);
+  //               } else {
+  //                 console.log("image supprimée !");
+  //               }
+  //             });
+  //             return modifyRessource.update({
+  //               title: title ? title : modifyRessource.title,
+  //               content: content ? content : modifyRessource.content,
+  //               image: attachment ? attachment : modifyRessource.attachment,
+  //               movie: movie ? movie : modifyRessource.movie,  
+  //             });
+  //       })
+  //       .then(function(ressource){
+  //         return res.status(201).json(ressource)
+  //       })
+  //       .catch(function(err){
+  //         res.status(500).json({err});
+  //       })
+  //     } else {
+  //       throw error(invalid)
+  //     }
+  //   }catch(error){
+  //     res.status(400).json({message: error.message})
+  //   }
+  // },
 
   getOneRessource: function(req, res){
     let headerAuth = req.headers["authorization"];
@@ -402,7 +380,13 @@ module.exports = {
       return res.status(400).json({error: `nous n'êtes pas identifié`})
     }
     models.Ressource.findOne({
-      where: {id: ressourceId}
+      where: {id: ressourceId},
+      include: [
+        {
+          model: models.File,
+          attributes: ["id","image", "movie", "pdf"]
+        }
+      ],
     })
     .then(function(ressource){
       return res.status(200).json(ressource)
@@ -411,4 +395,138 @@ module.exports = {
       return res.status(400).json({error: "ressource inexistante"})
     })
   },
+
+
+
+
+
+
+  modifyRessource: async function (req, res) {
+    try {
+      const valid = await updateRessourceSchema.validateAsync(req.body);
+      if (valid) {
+        let headerAuth = req.headers["authorization"];
+        let userId = jwtUtils.getUserId(headerAuth);
+        const ressourceId = req.params.ressourceId;
+
+        let title = null
+        let content = null;
+        let project = null;
+        let attachment = [];
+        let movie = [];
+        let pdf = [];
+        let files = req.files;
+
+        if (files) {
+          for(let i = 0; i < files.length; i++){
+            let media = req.files[i].filename;
+            if (media.includes(".mp4")) {
+              movie.push( `${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`) ;
+            }else if(media.includes('pdf')){
+              pdf.push(`${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`)  ;
+            } else {
+              attachment.push(`${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`);
+            }
+           }
+           console.log(req.files);
+           console.log(attachment);
+        }
+
+        if(req.body.title){
+          title = String(req.body.title)
+        }
+        if (req.body.content) {
+          content = String(req.body.content);
+          if (content.length > CONTENT_LIMIT) {
+            return res.status(400).json({ error: "trop de caractères" });
+          }
+        }
+        if (req.body.project){
+            project = String(req.body.project);
+        }
+
+        asyncLib.waterfall(
+          [
+            function (done) {
+              models.Ressource.findOne({
+                where: { id: ressourceId }
+              })
+                .then(function (ressourceFound) {
+                  done(null, ressourceFound);
+                })
+                .catch(function(error){
+                  return res.status(500).json({message: error.message});
+                });
+            },
+            function (ressourceFound, done) {
+              if (ressourceFound) {
+                ressourceFound.update({
+                title: title ? title : ressourceFound.title,
+                content: content ? content : ressourceFound.content,
+                project: project ? project : ressourceFound.project
+                }).then(function (updateRessource) {
+                  done(null, ressourceFound, updateRessource);
+                }).catch(function(err){
+                  return res.status(404).json({message: err.message });
+                })
+              } else {
+                res.status(404).json({ error: "user not found" });
+              }
+            },
+            function(ressourceFound, updateRessource, done){
+              
+              if(ressourceFound){
+                for(let i = 0; i < attachment.length; i++){
+                  console.log(attachment);
+                  models.File.create({
+                    RessourceId : updateRessource.id,
+                    image: attachment[i]
+                    
+                  })
+                  .then(function (newFile) {
+                    done(ressourceFound,updateRessource ,newFile);
+                  }).catch(function(err){
+                    return res.status(404).json({message: err.message });
+                  })
+                }
+                for(let i = 0; i < movie.length; i++){
+                  models.File.create({
+                    RessourceId : updateRessource.id,
+                    movie: movie[i]
+                  })
+                }
+                for(let i = 0; i < pdf.length; i++){
+                  models.File.create({
+                    RessourceId : updateRessource.id,
+                    pdf: pdf[i]
+                  })
+                  .then(function (newRessource) {
+                    done(null, userFound, newRessource);
+                  }).catch(function(err){
+                    return res.status(404).json({message: err.message });
+                  })
+                }
+                
+              }else {
+                res.status(404).json({ error: "post not found" });
+              }
+            }
+          ],
+          function (newRessource) {
+            if (newRessource) {
+              return res.status(201).json({newRessource});
+            } else {
+              return res.status(500).json({ error: "cannot post message" });
+            }
+          }
+        );
+      } else {
+        throw error(invalid);
+      }
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  },
+
+
 };

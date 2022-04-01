@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       models.Chat.belongsTo(models.User,{
         foreignKey:{
-          allowNull: false
+          allowNull: false,
+          onDelete: "SET NULL"
         }
       })
     }

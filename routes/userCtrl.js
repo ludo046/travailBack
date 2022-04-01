@@ -11,7 +11,9 @@ const nodemailer = require('nodemailer'),
       hogan = require('hogan.js'),
       inlineCss = require('inline-css');
 const pathResolver = require('path') ;
+const crypto = require('crypto');
 require("dotenv").config();
+
 
 
 
@@ -26,7 +28,7 @@ module.exports = {
                 const age = req.body.age;
                 const email = req.body.email;
                 const password = req.body.password;
-                const code = req.body.code;
+
 
 
                 if(firstname == null || lastname == null || age == null || email == null ||password == null) {
@@ -57,7 +59,7 @@ module.exports = {
                             .then(function(newUser){
                                 // return res.status(201).json({
                                 //     'userId' : newUser.id,
-                                //     token: jwtUtils.generateTokenForUser(newUser)dd
+                                //     token: jwtUtils.generateTokenForUser(newUser)
                                 // })
                                let transport = nodemailer.createTransport({
                                    service:"gmail",
@@ -104,21 +106,21 @@ module.exports = {
 
                             })
                             .catch(function(error){
-                                return res.status(500).json({message : error.message})
+                                return res.status(500).json({message: error.message})
                             })
                         })
                     } else {
-                        return res.status(409).json({ 'error' : 'un compte utilisateur existe déjà avec cette adress mail' });
+                        return res.status(409).json({ 'error' : 'un compte utilisateur existe déjà avec cette adresse mail' });
                     }
                 })
                 .catch(function(error){
-                    return res.status(500).json({message : error.message})
+                    return res.status(500).json({message: error.message})
                 })
             } else {
                 throw error(invalid)
             }
         }catch (error){
-            res.status(400).json({message : error.message})
+            res.status(400).json({message: error.message})
         }
     },
 
@@ -165,12 +167,20 @@ module.exports = {
                 })
                 .then(function(userFound){
                     if(userFound){
+                        userFound.update({
+                            online: true
+                        })
                         bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt){
                             if(userFound.activate === false){
                                 return res.status(400).json({message: `ton compte n'est pas activé`})
                             } else if(resBycrypt){
+
                                 return res.status(200).json({
                                     'userId' : userFound.id,
+                                    'statut' : userFound.online,
+                                    'name': userFound.lastname,
+                                    'firstname':userFound.firstname,
+                                    'picture': userFound.picture,
                                     'isAdmin' : userFound.isAdmin,
                                     'token' : jwtUtils.generateTokenForUser(userFound)
                                 })
@@ -191,6 +201,51 @@ module.exports = {
         }catch(error){
             res.status(400).json({message: error.message})
         }
+    },
+
+    deleteUser: function(req, res){
+        let headerAuth = req.headers['authorization'];
+        let userId = jwtUtils.getUserId(headerAuth)
+        console.log(userId);
+        
+        //verifie que le userId n'est pas null 
+        if (userId <= 0){
+          return res.status(400).json({ 'error': 'wrong token' })
+        };
+        
+        //cherche le user 
+        models.User.findOne({
+          where: {
+            id: userId,
+          }
+        }).then(function(user){
+            console.log(user);
+          models.User.destroy({
+              where: {
+                id: userId
+              }
+          })
+        }).catch(function(err){
+          res.status(500).json({ message: err.message})
+        })
+    },
+
+    disconnect: function(req,res){ 
+        const headerAuth = req.headers['authorization'];
+        const userId = jwtUtils.getUserId(headerAuth)
+
+        models.User.findOne({
+            where: {id: userId}
+        })
+        .then(function(userFound){
+            userFound.update({
+                online: false
+            })
+        })
+        .catch(function (err){
+            res.status(500).json({message: err.message})
+        })
+
     },
 
     getAllUser: function(req,res){
@@ -250,12 +305,14 @@ module.exports = {
                 const lastname = req.body.lastname;
                 const email = req.body.email;
                 const age = req.body.age;
-                let picture = "";
-                if(req.file){
-                    picture = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;  
+                let picture = null;
+                let files = req.files;
+                if(req.files){
+                    for(let i = 0; i < files.length; i++){
+                        picture = `${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`
+                       } 
                 }
-                
-        
+
                 if(userId <= 0 ){
                     return res.status(400).json({'error': `vous n'êtes pas identifié`});
                 }
@@ -301,5 +358,94 @@ module.exports = {
             res.status(400).json({message: error.message})
         }
 
-    }
+    },
+
+    // resetPassword: async function(req, res){
+    //     if(!req.body.email){
+    //         return res.status(500).json({message : 'email requis'});
+    //     }
+    //     const user = await models.user.findOne({
+    //         email : req.body.email
+    //     });
+    //     if(!user){
+    //         return res.status(409).json({message : "l'email n'existe pas"});
+    //     }
+    //     else{
+    //         const passwordToken = jwtUtils.generateTokenForUser(user.id);
+    //         user.update({
+    //                 passwordToken: (passwordToken ? passwordToken : user.passwordToken)
+    //             }).then(function(){
+    //                 done(userFound);
+    //             }).catch(function(err){
+    //                 return res.status(500).json({message: err.message})
+    //             });
+    //         }
+    //         let transport = nodemailer.createTransport({
+    //             service:"gmail",
+    //             host: 'smtp.gmail.com',
+    //             port: 587,
+    //             secure: true,
+    //             auth: {
+    //                 user: 'travailaveclesourire@gmail.com',
+    //                 pass: 'Fripon046'
+    //             }
+    //         });
+
+    //         (async function(){
+    //             try{
+    //              const templateFile = fs.readFileSync(pathResolver.join(__dirname,'./template/templatePwd.html'))
+         
+    //              const templateStyled = await inlineCss(templateFile.toString(), {url: "file://"+__dirname+"/template/"});
+    //              const templateCompiled = hogan.compile(templateStyled);
+    //              const templateRendered = templateCompiled.render({name: user.firstname, token: passwordToken});
+
+    //              let mailOption = {
+    //                  from: process.env.USER,
+    //                  to: newUser.email,
+    //                  subject: 'réinitialise ton mot de passe',
+    //                  html: templateRendered
+    //              };
+                 
+    //             await transport.sendMail(mailOption, (error, info) => {
+    //                  if(error){
+    //                      return console.log(error);
+    //                  } else {
+    //                       console.log('message send :', info.messageId);
+    //                       console.log('preview url : ', nodemailer.getTestMessageUrl(info));
+    //                  }
+    //                  res.send({message: 'ok'})
+    //              })
+    //             } catch(e){
+    //              console.error(e);
+    //             }
+    //         })()
+    //     },
+
+        validPasswordToken: async function(req, res){
+            if(!req.body.resetToken){
+                return res.status(500).json({message : 'token requis'});
+            }
+            const decodedToken = req.body.resetToken.jwtUtils.getUserId()
+            const user = await models.user.findOne({
+                id : decodedToken
+            });
+            if(user.passwordToken === req.body.resetToken){
+                return res.send('ok')
+            }
+
+        },
+
+        // newPassword: async function(req,res){
+        //     const userId = this.validPasswordToken.decodedToken;
+        //     if (!userId){
+        //         return res.status(409).json({message : 'token expiré'})
+        //     }
+        //     const newPassword = bcrypt.hash(req.body.password, 10);
+        //     const user = models.user.findOne({
+        //         id : userId
+        //     })
+        //     user.update({
+        //        password : newPassword 
+        //     })
+        // }
 }
