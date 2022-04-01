@@ -68,7 +68,7 @@ module.exports = {
                                    secure: true,
                                    auth: {
                                        user: 'travailaveclesourire@gmail.com',
-                                       pass: 'Fripon046'
+                                       pass: 'Fripon0046'
                                    }
                                });
 
