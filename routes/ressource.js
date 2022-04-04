@@ -173,7 +173,6 @@ module.exports = {
     })
       .then(function (ressource) {
         if (ressource) {
-          console.log(ressource);
           res.status(200).json(ressource);
         } else {
           res.status(404).json({ error: "aucune ressources trouvée" });
@@ -221,6 +220,7 @@ module.exports = {
     let headerAuth = req.headers["authorization"];
     let userId = jwtUtils.getUserId(headerAuth);
     let ressourceId = parseInt(req.params.ressourceId)
+    console.log(ressourceId);
 
     if(userId <= 0){
       return res.status(400).json({error: "utilisateur non reconnu"})
@@ -229,6 +229,18 @@ module.exports = {
       return res.status(400).json({error: "ressource non reconnu"})
     }
 
+    models.File.destroy({
+      where : {
+        RessourceId : ressourceId
+      }
+    })
+    .then(() => {
+      res.status(201).json({message : 'files supprimer'})
+    })
+    .catch((err) => {
+      res.status(400).json({message : err.message})
+    })
+    
     models.Ressource.findOne({
       where:{
         userId: userId,
@@ -236,39 +248,39 @@ module.exports = {
       }
     })
     .then(function(ressource){
-      if(ressource.image){
-        const filename = ressource.image.split("/images/")[1];
-        fs.unlink(`images/${filename}`,() =>{
-          models.Ressource.destroy({
-            where:{
-              userId: userId,
-              id: ressourceId
-            }
-          })
-          .then(function(){
-            res.status(201).json(({ok: "ressource supprimée"}))
-          })
-          .catch(function (err){
-            res.status(400).json({ err });
-          })
-        });
-      } else if(ressource.movie){
-        const filename = ressource.movie.split("/images/")[1];
-        fs.unlink(`images/${filename}`,() =>{
-          models.Ressource.destroy({
-            where:{
-              userId: userId,
-              id: ressourceId
-            }
-          })
-          .then(function(){
-            res.status(201).json(({ok: "ressource supprimée"}))
-          })
-          .catch(function (err){
-            res.status(400).json({ err });
-          })
-        });
-      } else {
+      // if(ressource.image){
+      //   const filename = ressource.image.split("/images/")[1];
+      //   fs.unlink(`images/${filename}`,() =>{
+      //     models.Ressource.destroy({
+      //       where:{
+      //         userId: userId,
+      //         id: ressourceId
+      //       }
+      //     })
+      //     .then(function(){
+      //       res.status(201).json(({ok: "ressource supprimée"}))
+      //     })
+      //     .catch(function (err){
+      //       res.status(400).json({ err });
+      //     })
+      //   });
+      // } else if(ressource.movie){
+      //   const filename = ressource.movie.split("/images/")[1];
+      //   fs.unlink(`images/${filename}`,() =>{
+      //     models.Ressource.destroy({
+      //       where:{
+      //         userId: userId,
+      //         id: ressourceId
+      //       }
+      //     })
+      //     .then(function(){
+      //       res.status(201).json(({ok: "ressource supprimée"}))
+      //     })
+      //     .catch(function (err){
+      //       res.status(400).json({ err });
+      //     })
+      //   });
+      // } else {
         models.Ressource.destroy({
           where:{
             userId: userId,
@@ -281,94 +293,12 @@ module.exports = {
         .catch(function (err){
           res.status(400).json({ err });
         })
-      }
+      
     })
     .catch(function(err){
-      res.status(400).json({ err });
+      res.status(400).json({message : err.message});
     })
   },
-
-
-
-  // modifyRessource: async function(req, res){
-  //   try{
-  //     const valid = await updateRessourceSchema.validateAsync(req.body);
-  //     if(valid){
-  //       let headerAuth = req.headers["authorization"];
-  //       let userId = jwtUtils.getUserId(headerAuth);
-  //       const ressourceId = req.params.ressourceId;
-
-  //       let title = null
-  //       let content = [null];
-  //       let attachment = [];
-  //       let pdf = [];
-  //       let movie = [];
-  //       let files = req.files;
-
-  //       if(userId <= 0){
-  //         return res.status(400).json({error : `nous n'êtes pas identifié`})
-  //       }
-
-  //       if (files) {
-  //         for(let i = 0; i < files.length; i++){
-  //           let media = req.files[i].filename;
-  //           if (media.includes(".mp4")) {
-  //             movie.push( `${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`) ;
-  //           }else if(media.includes('pdf')){
-  //             pdf.push(`${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`)  ;
-  //           } else {
-  //             attachment.push(`${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`);
-  //           }
-  //          } 
-  //       }
-  //       if(req.body.title){
-  //         title = req.body.title
-  //       }
-  //       if(req.body.content){
-  //         content = req.body.content
-  //       }
-
-  //       models.Ressource.findOne({
-  //         where:{
-  //           id: ressourceId
-  //         }
-  //       })
-  //       .then(function(modifyRessource){
-  //         let filename = null;
-  //         if(modifyRessource.attachment && content){
-  //              filename = modifyRessource.picture.split("/images/")[1];
-  //         }
-
-  //         if(modifyRessource.movie && content){
-  //             filename = modifyRessource.movie.split("/images/")[1];
-  //           }
-  //           fs.unlink(`app/images/${filename}`, (err) => {
-  //               if (err) {
-  //                 return console.log(err);
-  //               } else {
-  //                 console.log("image supprimée !");
-  //               }
-  //             });
-  //             return modifyRessource.update({
-  //               title: title ? title : modifyRessource.title,
-  //               content: content ? content : modifyRessource.content,
-  //               image: attachment ? attachment : modifyRessource.attachment,
-  //               movie: movie ? movie : modifyRessource.movie,  
-  //             });
-  //       })
-  //       .then(function(ressource){
-  //         return res.status(201).json(ressource)
-  //       })
-  //       .catch(function(err){
-  //         res.status(500).json({err});
-  //       })
-  //     } else {
-  //       throw error(invalid)
-  //     }
-  //   }catch(error){
-  //     res.status(400).json({message: error.message})
-  //   }
-  // },
 
   getOneRessource: function(req, res){
     let headerAuth = req.headers["authorization"];
@@ -384,7 +314,7 @@ module.exports = {
       include: [
         {
           model: models.File,
-          attributes: ["id","image", "movie", "pdf"]
+          attributes: ["id","ressourceId","image", "movie", "pdf"]
         }
       ],
     })
@@ -418,6 +348,13 @@ module.exports = {
         let files = req.files;
 
         if (files) {
+          models.File.destroy({
+            where : {
+              ressourceId : ressourceId
+            }
+          }).then(() => {
+            res.status(200).json("files supprimées")
+          })
           for(let i = 0; i < files.length; i++){
             let media = req.files[i].filename;
             if (media.includes(".mp4")) {
@@ -426,11 +363,13 @@ module.exports = {
               pdf.push(`${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`)  ;
             } else {
               attachment.push(`${req.protocol}://${req.get("host")}/images/${req.files[i].filename}`);
+              
             }
            }
-           console.log(req.files);
-           console.log(attachment);
         }
+
+        console.log(req.files);
+
 
         if(req.body.title){
           title = String(req.body.title)
@@ -474,30 +413,28 @@ module.exports = {
               }
             },
             function(ressourceFound, updateRessource, done){
-              
+
               if(ressourceFound){
                 for(let i = 0; i < attachment.length; i++){
-                  console.log(attachment);
                   models.File.create({
-                    RessourceId : updateRessource.id,
+                    RessourceId : ressourceId,
                     image: attachment[i]
-                    
                   })
                   .then(function (newFile) {
-                    done(ressourceFound,updateRessource ,newFile);
+                    done(userFound,newRessource ,newFile);
                   }).catch(function(err){
                     return res.status(404).json({message: err.message });
                   })
                 }
                 for(let i = 0; i < movie.length; i++){
                   models.File.create({
-                    RessourceId : updateRessource.id,
+                    RessourceId : ressourceId,
                     movie: movie[i]
                   })
                 }
                 for(let i = 0; i < pdf.length; i++){
                   models.File.create({
-                    RessourceId : updateRessource.id,
+                    RessourceId :ressourceId,
                     pdf: pdf[i]
                   })
                   .then(function (newRessource) {
