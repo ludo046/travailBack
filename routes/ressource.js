@@ -66,7 +66,7 @@ module.exports = {
           return res.status(400).json({ error: "remplir au moins un champs" });
         }
 
-        asyncLib.waterfall(
+                asyncLib.waterfall(
           [
             function (done) {
               models.User.findOne({
@@ -89,7 +89,32 @@ module.exports = {
                   parcours: parcour,
                   isAdmin: false
                 }).then(function (newRessource) {
-                  done(null, userFound, newRessource);
+                  done(newRessource);
+                  if(attachment.length > 0){
+                    for(let i = 0; i < attachment.length; i++){
+                      models.File.create({
+                      RessourceId : newRessource.id,
+                      image: attachment[i]
+                    })
+                    }
+                  }
+                  if(movie.length > 0){
+                    for(let i = 0; i < attachment.length; i++){
+                      models.File.create({
+                      RessourceId : newRessource.id,
+                      image: movie[i]
+                    })
+                    }
+                  }
+                  if(attachment.length > 0){
+                    for(let i = 0; i < pdf.length; i++){
+                      models.File.create({
+                      RessourceId : newRessource.id,
+                      image: pdf[i]
+                    })
+                    }
+                  }
+  
                 }).catch(function(err){
                   return res.status(404).json({message: err.message });
                 })
@@ -97,46 +122,10 @@ module.exports = {
                 res.status(404).json({ error: "user not found" });
               }
             },
-            function(userFound, newRessource, done){
-              if(newRessource){
-          
-                for(let i = 0; i < attachment.length; i++){
-                  models.File.create({
-                    RessourceId : newRessource.id,
-                    image: attachment[i]
-                  })
-                  .then(function (newFile) {
-                    done(userFound,newRessource ,newFile);
-                  }).catch(function(err){
-                    return res.status(404).json({message: err.message });
-                  })
-                }
-                for(let i = 0; i < movie.length; i++){
-                  models.File.create({
-                    RessourceId : newRessource.id,
-                    movie: movie[i]
-                  })
-                }
-                for(let i = 0; i < pdf.length; i++){
-                  models.File.create({
-                    RessourceId : newRessource.id,
-                    pdf: pdf[i]
-                  })
-                  .then(function (newRessource) {
-                    done(null, userFound, newRessource);
-                  }).catch(function(err){
-                    return res.status(404).json({message: err.message });
-                  })
-                }
-                
-              }else {
-                res.status(404).json({ error: "post not found" });
-              }
-            }
           ],
           function (newRessource) {
             if (newRessource) {
-              return res.status(201).json({newRessource});
+              return res.status(201).json(newRessource);
             } else {
               return res.status(500).json({ error: "cannot post message" });
             }
