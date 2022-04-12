@@ -160,7 +160,7 @@ module.exports = {
                 const password = req.body.password;
 
                 if(email == null || password == null){
-                    return res.status(400).json({message : '⚠️ Tous les champs ne sont pas remplis'});
+                    return res.status(400).json({'error' : 'tous les champs ne sont pas remplis'});
                 }
                 models.User.findOne({
                     where: {email: email}
@@ -172,7 +172,7 @@ module.exports = {
                         })
                         bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt){
                             if(userFound.activate === false){
-                                return res.status(400).json({message: `⚠️ Ton compte n'est pas activé`})
+                                return res.status(400).json({message: `ton compte n'est pas activé`})
                             } else if(resBycrypt){
 
                                 return res.status(200).json({
@@ -193,7 +193,7 @@ module.exports = {
                     }
                 })
                 .catch(function(err){
-                    return res.status(500).json({'error' : `⚠️ Adresse email incorrect`})
+                    return res.status(500).json({'error' : `impossible de verifier l'utilisateur`})
                 })
             } else {
                 throw error(invalid)
