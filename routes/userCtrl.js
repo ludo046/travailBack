@@ -193,7 +193,7 @@ module.exports = {
                     }
                 })
                 .catch(function(err){
-                    return res.status(404).json({message : `⚠️ Adresse email incorrect`})
+                    return res.status(500).json({'error' : `⚠️ Adresse email incorrect`})
                 })
             } else {
                 throw error(invalid)
