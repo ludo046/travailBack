@@ -193,7 +193,7 @@ module.exports = {
                     }
                 })
                 .catch(function(err){
-                    return res.status(500).json({'error' : `impossible de verifier l'utilisateur`})
+                    return res.status(500).json({message : `⚠️ Adresse email incorrect`})
                 })
             } else {
                 throw error(invalid)
