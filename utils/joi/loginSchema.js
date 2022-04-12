@@ -8,7 +8,7 @@ const loginSchema = Joi.object({
         password: Joi.string()
         .min(8)
         .max(16)
-        .error(new Error('⚠️ Ton mot de passe doit contenir entre 8 et 16 caractères dont un chiffre')),
+        .error(new Error('⚠️ Mot de passe incorrect')),
     })
     module.exports = loginSchema;
 

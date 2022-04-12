@@ -185,11 +185,11 @@ module.exports = {
                                     'token' : jwtUtils.generateTokenForUser(userFound)
                                 })
                             } else {
-                                return res.status(403).json({'error': 'mot de passe incorrect'});
+                                return res.status(403).json({message : '⚠️ Mot de passe incorrect'});
                             }
                         })
                     } else {
-                        return res.status(404).json({'error': 'utilisateur inexistant '})
+                        return res.status(404).json({message: '⚠️ Adresse email incorrect'})
                     }
                 })
                 .catch(function(err){
