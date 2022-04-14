@@ -6,6 +6,7 @@ const helmet = require('helmet')
 const fs = require('fs');
 require('dotenv').config();
 const db = require("./models");
+const { emit } = require('process');
 //db.sequelize.sync();
 //db.sequelize.sync({force: true});
 require('dotenv').config();
@@ -55,9 +56,11 @@ io.on('connection', (socket) => {
     socket.on('room message', (msg) => {
         io.emit('message room', ({msg}))
     })
-    socket.on('disconnect', () => {
-        console.log('user '+ users[socket.id] +' disconnected');
+    socket.on('offline', (usere) => {
+        console.log('user '+ usere.userId +' disconnected');
+        io.emit('offline', usere.userId);
         delete users[socket.id]
+        
     })
 
 })
