@@ -12,6 +12,7 @@ const nodemailer = require('nodemailer'),
       inlineCss = require('inline-css');
 const pathResolver = require('path') ;
 const crypto = require('crypto');
+const { env } = require('process');
 require("dotenv").config();
 
 
@@ -65,10 +66,13 @@ module.exports = {
                                    service:"gmail",
                                    host: 'smtp.gmail.com',
                                    port: 587,
+                                   //port: 465,
                                    secure: true,
                                    auth: {
-                                       user: 'travailaveclesourire@gmail.com',
-                                       pass: 'Fripon0046'
+                                    //    user: process.env.USER,
+                                    //    pass: process.env.MAILPASS
+                                    user: "travailaveclesourire@gmail.com",
+                                    pass: "xfapcxcdvqqqqjqt"
                                    }
                                });
 
