@@ -30,7 +30,7 @@ server.use((req,res,next) => {
     next();
 });
 
-let http = require('https').Server(server);
+let http = require('http').Server(server);
 //let httpServer = http.Server(server);
 
 let io = require('socket.io')(http);
